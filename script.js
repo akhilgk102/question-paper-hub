@@ -58,8 +58,6 @@ document.getElementById(
 
 
 
-
-
 async function loadPapers(){
 
 try{
@@ -71,35 +69,51 @@ const response=await fetch(
 const files=await response.json();
 
 const category=
-document.getElementById("category").value.toLowerCase();
+document.getElementById("category").value;
 
 const university=
-document.getElementById("university").value.toLowerCase();
+document.getElementById("university").value;
 
 const course=
-document.getElementById("course").value.toLowerCase();
+document.getElementById("course").value;
 
 const semester=
-document.getElementById("semester").value.toLowerCase();
+document.getElementById("semester").value;
 
 const year=
-document.getElementById("year").value.toLowerCase();
+document.getElementById("year").value;
 
-let papers=
-document.getElementById("papers");
+let papers=document.getElementById("papers");
 
 papers.innerHTML="";
 
 files.forEach(file=>{
 
-let name=file.name.toLowerCase();
+let name=file.name
+.toLowerCase()
+.replace(/[_\-\s]+/g,"");
+
+let uni=university
+.toLowerCase()
+.replace(/[_\-\s]+/g,"");
+
+let cour=course
+.toLowerCase()
+.replace(/[_\-\s]+/g,"");
+
+let sem=semester
+.toLowerCase()
+.replace(/[_\-\s]+/g,"");
+
+let yr=year
+.toLowerCase()
+.replace(/[_\-\s]+/g,"");
 
 if(
-(category && !name.includes(category)) ||
-(university && !name.includes(university.replaceAll(" ","_"))) ||
-(course && !name.includes(course.replaceAll(" ","_"))) ||
-(semester && !name.includes(semester.replaceAll(" ","_"))) ||
-(year && !name.includes(year))
+(uni && !name.includes(uni)) ||
+(cour && !name.includes(cour)) ||
+(sem && !name.includes(sem.replace("sem","s"))) ||
+(yr && !name.includes(yr))
 ){
 return;
 }

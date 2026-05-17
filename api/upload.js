@@ -47,7 +47,9 @@ courseMap[req.headers.course] || ""
 }_${
 req.headers.semester.replace("Sem ","S")
 }_${
-req.headers.subject.toUpperCase()
+req.headers.subject
+.toUpperCase()
+.replace(/\s+/g,"_")
 }_${
 req.headers.year
 }.pdf`;
