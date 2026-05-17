@@ -1,85 +1,52 @@
-*{
-
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
 }
 
-body{
-
-background:#f2f2f2;
-
+body {
+  background: #f2f2f2;
 }
 
-header{
-
-background:#1296f3;
-
-padding:30px;
-
-text-align:center;
-
-color:white;
-
+header {
+  background: #1296f3;
+  padding: 30px;
+  text-align: center;
+  color: white;
 }
 
-.container{
-
-padding:30px;
-
+.container {
+  padding: 30px;
 }
 
-.box{
-
-width:500px;
-
-margin:100px auto;
-
-background:white;
-
-padding:30px;
-
-border-radius:10px;
-
+.box {
+  width: 500px;
+  margin: 100px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
 }
 
 select,
 button,
-input{
-
-padding:10px;
-
-margin:10px;
-
+input {
+  padding: 10px;
+  margin: 10px;
 }
 
-.paper{
-
-background:white;
-
-padding:20px;
-
-margin-top:15px;
-
-border-radius:10px;
-
-box-shadow:
-0 2px 8px rgba(
-0,0,0,.1
-);
-
+.paper {
+  background: white;
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
 }
 
-.btns{
-
-display:flex;
-
-gap:10px;
-
-margin-top:10px;
-
+.btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 /* ══════════════════════════════════════
@@ -97,7 +64,7 @@ margin-top:10px;
 ══════════════════════════════════════ */
 @keyframes cardIn {
   from { opacity: 0; transform: translateY(20px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0)   scale(1); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .pdf-card {
@@ -114,7 +81,7 @@ margin-top:10px;
   flex-direction: column;
   transition:
     box-shadow 0.25s ease,
-    transform  0.25s ease,
+    transform 0.25s ease,
     border-color 0.25s ease;
   position: relative;
 }
@@ -129,7 +96,7 @@ margin-top:10px;
 }
 
 /* ══════════════════════════════════════
-   TOP BADGE (university pill)
+   TOP BADGE
 ══════════════════════════════════════ */
 .pdf-card-badge {
   position: absolute;
@@ -160,7 +127,6 @@ margin-top:10px;
   overflow: hidden;
 }
 
-/* subtle gradient fade at bottom edge */
 .pdf-embed-wrap::after {
   content: '';
   position: absolute;
@@ -243,7 +209,10 @@ margin-top:10px;
   transition: opacity 0.2s, transform 0.2s;
 }
 
-.pdf-fullscreen-btn svg { width: 15px; height: 15px; }
+.pdf-fullscreen-btn svg {
+  width: 15px;
+  height: 15px;
+}
 
 .pdf-card:hover .pdf-fullscreen-btn {
   opacity: 1;
@@ -251,63 +220,28 @@ margin-top:10px;
 }
 
 /* ══════════════════════════════════════
-   FOOTER
+   CARD BODY
 ══════════════════════════════════════ */
-.pdf-card-footer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 10px;
-  background: var(--bg-card);
-  border-top: 1px solid var(--border);
-  position: relative;
-}
-
-/* left accent stripe */
-.pdf-card-footer::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 20%;
-  bottom: 20%;
-  width: 3px;
-  background: var(--accent);
-  border-radius: 0 3px 3px 0;
-  opacity: 0;
-  transform: scaleY(0.5);
-  transition: opacity 0.25s, transform 0.25s;
-}
-
-.pdf-card:hover .pdf-card-footer::before {
-  opacity: 1;
-  transform: scaleY(1);
-}
-
-/* ══════════════════════════════════════
-   CARD INFO SECTION
-══════════════════════════════════════ */
-.pdf-card-info {
-  min-width: 0;
-  flex: 1;
+.pdf-card-body {
+  padding: 12px 14px 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .pdf-card-name {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
-
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: clip;
+  text-overflow: ellipsis;
   letter-spacing: -0.3px;
-
   padding: 5px 7px;
   background: var(--bg-primary);
   border-radius: 6px;
   border: 1px solid var(--border);
+  text-align: center;
 }
 
 /* ══════════════════════════════════════
@@ -323,7 +257,7 @@ margin-top:10px;
 .tag {
   display: inline-flex;
   align-items: center;
-  font-size: 9.5px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.8px;
   padding: 3px 9px;
@@ -372,91 +306,85 @@ margin-top:10px;
 [data-theme="dark"] .tag-sub    { background: #231408; color: #FBBF24; border-color: #3D2410; }
 
 /* ══════════════════════════════════════
-   DOWNLOAD BUTTON
+   FOOTER
 ══════════════════════════════════════ */
-.btn-download {
-  display: inline-flex;
+.pdf-card-footer {
+  border-top: 1px solid var(--border);
+  padding: 10px 14px;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-mid) 100%);
-  border-radius: 10px;
-  color: #fff;
-  text-decoration: none;
-  flex-shrink: 0;
-  box-shadow:
-    0 2px 6px rgba(196,83,26,0.30),
-    0 1px 2px rgba(196,83,26,0.20);
-  transition: transform 0.15s, box-shadow 0.15s;
+  gap: 8px;
   position: relative;
-  overflow: hidden;
 }
 
-.btn-download::before {
+.pdf-card-footer::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.15);
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 3px 3px 0;
   opacity: 0;
-  transition: opacity 0.15s;
+  transform: scaleY(0.5);
+  transition: opacity 0.25s, transform 0.25s;
 }
 
-.btn-download:hover {
-  transform: translateY(-2px) scale(1.04);
-  box-shadow:
-    0 6px 18px rgba(196,83,26,0.35),
-    0 2px 6px rgba(196,83,26,0.25);
+.pdf-card:hover .pdf-card-footer::before {
+  opacity: 1;
+  transform: scaleY(1);
 }
-
-.btn-download:hover::before { opacity: 1; }
-.btn-download:active { transform: translateY(0) scale(0.97); }
-
-.btn-download svg { width: 16px; height: 16px; position: relative; z-index: 1; }
 
 /* ══════════════════════════════════════
-   DELETE BUTTON
+   BUTTONS
 ══════════════════════════════════════ */
-.btn-delete {
+.btn-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s;
+  border: none;
+  flex-shrink: 0;
+}
+
+.btn-action:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.btn-action:active {
+  transform: scale(0.97);
+}
+
+.btn-download {
+  flex: 1;
+  background: #1a56db;
+  color: #fff;
+  padding: 0 16px;
+}
+
+.btn-delete {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #d32f2f 0%, #ef5350 100%);
-  border-radius: 10px;
+  background: #d32f2f;
   color: #fff;
   border: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  box-shadow:
-    0 2px 6px rgba(211,47,47,0.30),
-    0 1px 2px rgba(211,47,47,0.20);
-  transition: transform 0.15s, box-shadow 0.15s;
-  position: relative;
-  overflow: hidden;
+  padding: 0;
 }
 
-.btn-delete::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.15);
-  opacity: 0;
-  transition: opacity 0.15s;
+[data-theme="dark"] .btn-delete {
+  background: #b71c1c;
+  color: #fff;
+  border: none;
 }
-
-.btn-delete:hover {
-  transform: translateY(-2px) scale(1.04);
-  box-shadow:
-    0 6px 18px rgba(211,47,47,0.35),
-    0 2px 6px rgba(211,47,47,0.25);
-}
-
-.btn-delete:hover::before { opacity: 1; }
-.btn-delete:active { transform: translateY(0) scale(0.97); }
-
-.btn-delete svg { width: 16px; height: 16px; position: relative; z-index: 1; }
 
 /* ══════════════════════════════════════
    SPINNERS
@@ -473,7 +401,8 @@ margin-top:10px;
 }
 
 .spinner-sm {
-  width: 22px; height: 22px;
+  width: 22px;
+  height: 22px;
   border: 2px solid var(--border);
   border-top-color: var(--accent);
   border-radius: 50%;
@@ -523,7 +452,6 @@ margin-top:10px;
   overflow: hidden;
 }
 
-/* decorative top accent line */
 .empty-state::before {
   content: '';
   position: absolute;

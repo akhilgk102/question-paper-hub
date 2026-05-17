@@ -93,77 +93,72 @@ async function loadPapers() {
       card.className = "pdf-card";
       card.style.animationDelay = `${index * 90}ms`;
 
-      card.innerHTML = `
-        <div class="pdf-embed-wrap">
+card.innerHTML = `
+  <div class="pdf-embed-wrap">
+    ${badgeText ? `<div class="pdf-card-badge">${badgeText}</div>` : ""}
+    <div class="pdf-loader">
+      <div class="pdf-loader-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="9" y1="13" x2="15" y2="13"/>
+          <line x1="9" y1="17" x2="13" y2="17"/>
+        </svg>
+      </div>
+      <div class="spinner-sm"></div>
+      <span>Loading preview…</span>
+    </div>
+    <iframe
+      src="${viewUrl}"
+      title="${file.name}"
+      allowfullscreen
+      loading="lazy"
+      onload="this.previousElementSibling.style.display='none'; this.style.opacity='1';"
+    ></iframe>
+    <a href="${viewUrl}" class="pdf-fullscreen-btn" target="_blank" title="Open fullscreen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+      </svg>
+    </a>
+  </div>
 
-          ${badgeText ? `<div class="pdf-card-badge">${badgeText}</div>` : ""}
+  <div class="pdf-card-body">
+    <p class="pdf-card-name" title="${file.name}">
+      ${file.name.replace(".pdf","").replaceAll("_"," ")}
+    </p>
+    <div class="pdf-card-tags">
+      ${parts[0] ? `<span class="tag tag-uni">${parts[0]}</span>` : ""}
+      ${parts[1] ? `<span class="tag tag-course">${parts[1]}</span>` : ""}
+      ${parts[2] ? `<span class="tag tag-sem">${parts[2]}</span>` : ""}
+      ${parts[3] ? `<span class="tag tag-year">${parts[3]}</span>` : ""}
+      ${parts[4] ? `<span class="tag tag-sub">${parts.slice(4).join(" ")}</span>` : ""}
+    </div>
+  </div>
 
-          <div class="pdf-loader">
-            <div class="pdf-loader-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-                   stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-                <line x1="9" y1="13" x2="15" y2="13"/>
-                <line x1="9" y1="17" x2="13" y2="17"/>
-              </svg>
-            </div>
-            <div class="spinner-sm"></div>
-            <span>Loading preview…</span>
-          </div>
-
-          <iframe
-            src="${viewUrl}"
-            title="${file.name}"
-            allowfullscreen
-            loading="lazy"
-            onload="
-              this.previousElementSibling.style.display='none';
-              this.style.opacity='1';
-            "
-          ></iframe>
-
-          <a href="${viewUrl}" class="pdf-fullscreen-btn" target="_blank" title="Open fullscreen">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-            </svg>
-          </a>
-
-        </div>
-
-        <div class="pdf-card-footer">
-          <div class="pdf-card-info">
-           <p class="pdf-card-name" title="${file.name}">
-${file.name.replace(".pdf","").replaceAll("_"," ")}
-</p>
-            <div class="pdf-card-tags">
-              ${parts[0] ? `<span class="tag tag-uni">${parts[0]}</span>`    : ""}
-              ${parts[1] ? `<span class="tag tag-course">${parts[1]}</span>` : ""}
-              ${parts[2] ? `<span class="tag tag-sem">${parts[2]}</span>`    : ""}
-              ${parts[3] ? `<span class="tag tag-year">${parts[3]}</span>`   : ""}
-              ${parts[4] ? `<span class="tag tag-sub">${parts.slice(4).join(" ")}</span>` : ""}
-            </div>
-          </div>
-          <a href="${file.download_url}" download class="btn-download" title="Download PDF">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 13 7 8"/>
-              <line x1="12" y1="3" x2="12" y2="13"/>
-            </svg>
-          </a>
-<button class="btn-delete" onclick="deletePaper('${file.name}')" title="Delete PDF">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-       stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="3 6 5 6 21 6"/>
-    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-    <path d="M10 11v6M14 11v6"/>
-    <path d="M9 6V4h6v2"/>
-  </svg>
-</button>
-        </div>
-      `;
+  <div class="pdf-card-footer">
+    <a href="${file.download_url}" download class="btn-action btn-download">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" width="15" height="15">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 13 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="13"/>
+      </svg>
+      Download
+    </a>
+    <button class="btn-action btn-delete" onclick="deletePaper('${file.name}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" width="15" height="15">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        <path d="M10 11v6M14 11v6"/>
+        <path d="M9 6V4h6v2"/>
+      </svg>
+      
+    </button>
+  </div>
+`;
 
       grid.appendChild(card);
     });
