@@ -66,12 +66,13 @@ async function loadPapers() {
     papers.innerHTML = "";
 
     if (filtered.length === 0) {
-      papers.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">📭</div>
-          <p>No papers found.</p>
-          <span>Try adjusting your filters.</span>
-        </div>`;
+    papers.innerHTML = `
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <p>No papers found</p>
+        <span>Try adjusting your filters above</span>
+        <div class="empty-hint">refine your search</div>
+    </div>`;
       return;
     }
 
@@ -165,12 +166,13 @@ async function loadPapers() {
 
   } catch (error) {
     console.error(error);
-    papers.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">⚠️</div>
-        <p>Failed to load papers.</p>
-        <span>Check your connection and try again.</span>
-      </div>`;
+papers.innerHTML = `
+  <div class="empty-state">
+    <div class="empty-icon">⚠️</div>
+    <p>Something went wrong</p>
+    <span>Check your connection and try again</span>
+    <div class="empty-hint">reload the page</div>
+  </div>`;
   }
 }
 
