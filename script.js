@@ -1,43 +1,37 @@
 async function uploadPDF(){
 
-let file=
-document.getElementById(
-"pdf"
-).files[0];
+let file=document.getElementById("pdf").files[0];
 
 if(!file){
-
-alert(
-"Select PDF"
-);
-
+alert("Select PDF");
 return;
-
 }
 
-let response=
-await fetch(
-"/api/upload",
-{
+let category=document.getElementById("category")?.value || "";
+let university=document.getElementById("university")?.value || "";
+let course=document.getElementById("course")?.value || "";
+let semester=document.getElementById("semester")?.value || "";
+
+let response=await fetch("/api/upload",{
 
 method:"POST",
 
+headers:{
+category,
+university,
+course,
+semester
+},
+
 body:file
 
-}
+});
 
-);
+let data=await response.json();
 
-let data=
-await response.json();
-
-document.getElementById(
-"msg"
-).innerHTML=
-data.message;
+document.getElementById("msg").innerHTML=data.message;
 
 }
-
 
 
 async function loadPapers(){
@@ -59,7 +53,23 @@ document.getElementById(
 
 papers.innerHTML="";
 
+let university=document.getElementById("university").value;
+let course=document.getElementById("course").value;
+let semester=document.getElementById("semester").value;
+
 files.forEach(file=>{
+
+let name=file.name.toLowerCase();
+
+if(
+(university && !name.includes(university.toLowerCase()))
+||
+(course && !name.includes(course.toLowerCase()))
+||
+(semester && !name.includes(semester.toLowerCase()))
+){
+return;
+}
 
 papers.innerHTML +=`
 

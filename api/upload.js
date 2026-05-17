@@ -26,8 +26,8 @@ export default async function handler(req, res) {
 
     const buffer = await getBuffer(req);
 
-    const filename=`paper_${Date.now()}.pdf`;
-
+    const filename=`${req.headers.category || "unknown"}_${req.headers.university || "unknown"}_${req.headers.course || "unknown"}_${req.headers.semester || "unknown"}_${Date.now()}.pdf`;
+    
     const content=buffer.toString("base64");
 
     const githubResponse=await fetch(
