@@ -180,26 +180,15 @@ papers.innerHTML = `
   }
 }
 
-
 async function deletePaper(filename){
 
-const password=
-prompt(
+const password=prompt(
 "Enter Admin Password"
 );
 
-if(password!== env.ADMIN_PASSWORD){
+if(!password)return;
 
-alert(
-"Wrong password"
-);
-
-return;
-
-}
-
-let response=
-await fetch(
+const response=await fetch(
 "/api/delete",
 {
 
@@ -210,18 +199,21 @@ headers:{
 },
 
 body:JSON.stringify({
-filename
+filename,
+password
 })
 
 }
-
 );
 
-let data=
-await response.json();
+const data=await response.json();
 
 alert(data.message);
 
+if(response.ok){
+
 loadPapers();
+
+}
 
 }
