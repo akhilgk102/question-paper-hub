@@ -16,31 +16,25 @@ async function getBuffer(req) {
 
 export default async function handler(req, res) {
 
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      message: "Method not allowed"
-    });
-  }
-
   try {
 
     const buffer = await getBuffer(req);
 
-    const filename = "paper_" + Date.now() + ".pdf";
-
-    const content = buffer.toString("base64");
+    const filename = `paper_${Date.now()}.pdf`;
 
     const token = process.env.GITHUB_TOKEN;
     const username = process.env.GITHUB_USERNAME;
     const repo = process.env.GITHUB_REPO;
 
+    const content = buffer.toString("base64");
+
     const githubResponse = await fetch(
       `https://api.github.com/repos/${username}/${repo}/contents/pdf/${filename}`,
       {
         method: "PUT",
-
         headers: {
-          Authorization: `token ${token}`,
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github+json",
           "Content-Type": "application/json"
         },
 
@@ -53,21 +47,11 @@ export default async function handler(req, res) {
 
     const data = await githubResponse.json();
 
-    if (!githubResponse.ok) {
-    console.log(data);
-
-    return res.status(500).json({
-        message:data.message
-    });
-    }
-
-    res.status(200).json({
-      message: "PDF uploaded successfully"
-    });
+    return res.status(githubResponse.status).json(data);
 
   } catch(error){
 
-    res.status(500).json({
+    return res.status(500).json({
       message:error.message
     });
 
