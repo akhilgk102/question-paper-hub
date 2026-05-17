@@ -14,7 +14,6 @@ body:file
 
 let data=await response.json();
 
-document.getElementById("msg").innerHTML =
-data.message || "Uploaded";
+document.getElementById("msg").innerHTML=data.message;
 
 }
