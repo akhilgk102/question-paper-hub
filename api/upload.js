@@ -1,10 +1,9 @@
 export default function handler(req,res){
 
-return res.status(200).json({
-
-hasToken: !!process.env.GITHUB_TOKEN,
-tokenStart: process.env.GITHUB_TOKEN?.substring(0,15)
-
+res.status(200).json({
+token: !!process.env.GITHUB_TOKEN,
+username: process.env.GITHUB_USERNAME || "missing",
+repo: process.env.GITHUB_REPO || "missing"
 });
 
 }
