@@ -26,7 +26,8 @@ export default async function handler(req, res) {
 
     const buffer = await getBuffer(req);
 
-    const filename=`paper_${Date.now()}.pdf`;
+    const filename=
+    `${type}_${course}_${semester}_${year}_${Date.now()}.pdf`;
 
     const content=buffer.toString("base64");
 

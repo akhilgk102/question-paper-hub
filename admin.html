@@ -1,15 +1,70 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Upload PDF</title>
-<link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
 <div class="box">
 
 <h2>Upload Question Paper</h2>
+
+<select id="type">
+
+<option value="">Select Category</option>
+<option value="school">School</option>
+<option value="university">University</option>
+
+</select>
+
+<select id="class">
+
+<option value="">Select Class</option>
+<option>10th CBSE</option>
+<option>10th State</option>
+<option>Plus One</option>
+<option>Plus Two</option>
+
+</select>
+
+<select id="stream">
+
+<option value="">Select Stream</option>
+<option>Bio Science</option>
+<option>Commerce</option>
+<option>Computer Science</option>
+<option>Humanities</option>
+
+</select>
+
+<select id="university">
+
+<option value="">Select University</option>
+<option>Kerala University</option>
+<option>MG University</option>
+<option>Calicut University</option>
+<option>Kannur University</option>
+
+</select>
+
+<select id="course">
+
+<option value="">Select Course</option>
+<option>BCA</option>
+<option>BSc Computer Science</option>
+<option>BCom</option>
+<option>BBA</option>
+
+</select>
+
+<select id="semester">
+
+<option value="">Semester</option>
+<option>Sem 1</option>
+<option>Sem 2</option>
+<option>Sem 3</option>
+<option>Sem 4</option>
+<option>Sem 5</option>
+<option>Sem 6</option>
+
+</select>
+
+<input type="number"
+id="year"
+placeholder="Year">
 
 <input type="file" id="pdf">
 
@@ -17,11 +72,4 @@
 Upload
 </button>
 
-<p id="msg"></p>
-
 </div>
-
-<script src="script.js"></script>
-
-</body>
-</html>
