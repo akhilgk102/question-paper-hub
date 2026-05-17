@@ -50,12 +50,28 @@ papers.innerHTML += `
 
 <div class="paper">
 
-<a href="${file.download_url}"
+<h3>📄 ${file.name}</h3>
+
+<div class="btns">
+
+<a href="https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(file.download_url)}"
 target="_blank">
 
-📄 ${file.name}
+<button>
+View
+</button>
 
 </a>
+
+<a href="${file.download_url}" download>
+
+<button>
+Download
+</button>
+
+</a>
+
+</div>
 
 </div>
 
