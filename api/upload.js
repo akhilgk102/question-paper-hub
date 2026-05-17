@@ -54,7 +54,11 @@ export default async function handler(req, res) {
     const data = await githubResponse.json();
 
     if (!githubResponse.ok) {
-      return res.status(500).json(data);
+    console.log(data);
+
+    return res.status(500).json({
+        message:data.message
+    });
     }
 
     res.status(200).json({
