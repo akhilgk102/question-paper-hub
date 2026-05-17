@@ -134,7 +134,9 @@ async function loadPapers() {
 
         <div class="pdf-card-footer">
           <div class="pdf-card-info">
-            <p class="pdf-card-name" title="${file.name}">${file.name}</p>
+           <p class="pdf-card-name" title="${file.name}">
+${file.name.replace(".pdf","").replaceAll("_"," ")}
+</p>
             <div class="pdf-card-tags">
               ${parts[0] ? `<span class="tag tag-uni">${parts[0]}</span>`    : ""}
               ${parts[1] ? `<span class="tag tag-course">${parts[1]}</span>` : ""}
@@ -151,13 +153,15 @@ async function loadPapers() {
               <line x1="12" y1="3" x2="12" y2="13"/>
             </svg>
           </a>
-          <button
-            class="btn-delete"
-            onclick="deletePaper('${file.name}')">
-
-            Delete
-
-            </button>
+<button class="btn-delete" onclick="deletePaper('${file.name}')" title="Delete PDF">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 6 5 6 21 6"/>
+    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+    <path d="M10 11v6M14 11v6"/>
+    <path d="M9 6V4h6v2"/>
+  </svg>
+</button>
         </div>
       `;
 
