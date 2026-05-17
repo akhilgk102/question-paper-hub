@@ -26,15 +26,31 @@ export default async function handler(req, res) {
 
     const buffer = await getBuffer(req);
 
-    const filename=`
-    ${req.headers.category}
-    _${req.headers.university}
-    _${req.headers.course}
-    _${req.headers.semester}
-    _${req.headers.year}
-    _${Date.now()}
-    .pdf`
-    .replace(/\s+/g,'_');
+const uniMap = {
+"Kerala University":"KU",
+"MG University":"MGU",
+"Calicut University":"CU",
+"Kannur University":"KNU"
+};
+
+const courseMap = {
+"BSc Computer Science":"BSC-CS",
+"BCA":"BCA",
+"BCom":"BCOM",
+"BBA":"BBA"
+};
+
+const filename = `${
+uniMap[req.headers.university] || req.headers.category
+}_${
+courseMap[req.headers.course] || ""
+}_${
+req.headers.semester.replace("Sem ","S")
+}_${
+req.headers.subject.toUpperCase()
+}_${
+req.headers.year
+}.pdf`;
 
     const content=buffer.toString("base64");
 

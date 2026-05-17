@@ -22,6 +22,14 @@ document.getElementById("semester").value;
 let year=
 document.getElementById("year").value;
 
+let subject =
+document.getElementById("subject").value.trim();
+
+if(!subject){
+alert("Enter subject name");
+return;
+}
+
 
 let response=await fetch("/api/upload",{
 
@@ -32,6 +40,7 @@ category,
 university,
 course,
 semester,
+subject,
 year
 },
 
