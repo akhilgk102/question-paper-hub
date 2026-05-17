@@ -1,138 +1,525 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>QuesVault</title>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  :root {
+    --bg-primary: #F9F7F2;
+    --bg-secondary: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --text-primary: #1A1816;
+    --text-secondary: #6B6760;
+    --text-muted: #A09D99;
+    --accent: #C4531A;
+    --accent-light: #FAECE7;
+    --accent-mid: #E87240;
+    --border: #E8E4DC;
+    --border-focus: #C4531A;
+    --shadow-sm: 0 1px 3px rgba(26,24,22,0.06);
+    --shadow-md: 0 4px 16px rgba(26,24,22,0.08);
+    --shadow-lg: 0 8px 32px rgba(26,24,22,0.10);
+    --header-bg: #1A1816;
+    --header-text: #F9F7F2;
+    --header-muted: #A09D99;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --transition: 0.2s ease;
+  }
 
+  [data-theme="dark"] {
+    --bg-primary: #121110;
+    --bg-secondary: #1E1C1A;
+    --bg-card: #252220;
+    --text-primary: #F0EDE8;
+    --text-secondary: #A09D99;
+    --text-muted: #6B6760;
+    --accent: #E87240;
+    --accent-light: #2A1A0F;
+    --accent-mid: #C4531A;
+    --border: #2E2B28;
+    --border-focus: #E87240;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+    --header-bg: #0D0C0B;
+    --header-text: #F0EDE8;
+    --header-muted: #6B6760;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--header-bg);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .header-brand h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--header-text);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .header-brand p {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--header-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-admin {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--transition), transform 0.1s;
+  }
+
+  .btn-admin:hover {
+    background: var(--accent-mid);
+    transform: translateY(-1px);
+  }
+
+  .btn-admin:active {
+    transform: translateY(0);
+  }
+
+  .btn-admin svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  /* ── DARK MODE TOGGLE ── */
+  .theme-toggle {
+    width: 46px;
+    height: 26px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.25s;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1), background 0.25s;
+  }
+
+  [data-theme="dark"] .theme-toggle {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  [data-theme="dark"] .theme-toggle::after {
+    transform: translateX(20px);
+    background: #fff;
+  }
+
+  .theme-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .theme-icon {
+    font-size: 15px;
+    line-height: 1;
+    transition: opacity 0.2s;
+  }
+
+  .icon-sun { color: #F9C74F; }
+  .icon-moon { color: #A09D99; }
+
+  /* ── MAIN CONTAINER ── */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  .section-header {
+    margin-bottom: 36px;
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+  }
+
+  .section-header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* ── FILTER CARD ── */
+  .filter-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 28px 24px;
+    box-shadow: var(--shadow-md);
+    transition: background var(--transition), border-color var(--transition);
+  }
+
+  .filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-group label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6760' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    transition: border-color 0.15s, box-shadow 0.15s, background var(--transition), color var(--transition);
+  }
+
+  select:hover {
+    border-color: var(--text-muted);
+  }
+
+  select:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(196,83,26,0.1);
+  }
+
+  .filter-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 4px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-search {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 11px 28px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--transition), transform 0.1s, box-shadow 0.1s;
+    box-shadow: 0 2px 8px rgba(196,83,26,0.25);
+  }
+
+  .btn-search:hover {
+    background: var(--accent-mid);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(196,83,26,0.3);
+  }
+
+  .btn-search:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .btn-search svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ── RESULTS ── */
+  #papers {
+    margin-top: 36px;
+  }
+
+  .results-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  /* Paper cards injected by script.js will pick up body color vars */
+  /* Provide baseline card styles script.js can use */
+  .paper-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+
+  .paper-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  /* ── DECORATIVE ACCENT LINE ── */
+  .accent-rule {
+    width: 40px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 99px;
+    margin: 10px 0 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .header-inner {
+      padding: 16px 20px;
+      flex-wrap: wrap;
+    }
+
+    .container {
+      padding: 32px 20px 60px;
+    }
+
+    .filter-card {
+      padding: 20px 18px 18px;
+    }
+
+    .filter-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .header-brand h1 {
+      font-size: 22px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .filter-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
 </head>
-
 <body>
 
 <header>
-
-<h1>QuesVault</h1>
-
-<p>Question Paper Portal</p>
-
-<a href="admin.html">
-<button>Admin Upload</button>
-</a>
-
+  <div class="header-inner">
+    <div class="header-brand">
+      <h1>QuesVault</h1>
+      <p>Question Paper Portal</p>
+    </div>
+    <div class="header-actions">
+      <div class="theme-toggle-wrap">
+        <span class="theme-icon icon-sun" aria-hidden="true">☀</span>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+        <span class="theme-icon icon-moon" aria-hidden="true">☽</span>
+      </div>
+      <a href="admin.html" style="text-decoration:none;">
+        <button class="btn-admin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          Admin Upload
+        </button>
+      </a>
+    </div>
+  </div>
 </header>
 
 <div class="container">
 
-<h2>Find Question Papers</h2>
+  <div class="section-header">
+    <h2>Find Question Papers</h2>
+    <div class="accent-rule"></div>
+    <p>Filter by university, course, semester and year</p>
+  </div>
 
-<select id="category">
+  <div class="filter-card">
+    <div class="filter-grid">
 
-<option value="">All Categories</option>
+      <div class="filter-group">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="">All Categories</option>
+          <option value="school">School</option>
+          <option value="university">University</option>
+        </select>
+      </div>
 
-<option value="school">
-School
-</option>
+      <div class="filter-group">
+        <label for="university">University</label>
+        <select id="university">
+          <option value="">All Universities</option>
+          <option>Kerala University</option>
+          <option>MG University</option>
+          <option>Calicut University</option>
+          <option>Kannur University</option>
+        </select>
+      </div>
 
-<option value="university">
-University
-</option>
+      <div class="filter-group">
+        <label for="course">Course</label>
+        <select id="course">
+          <option value="">All Courses</option>
+          <option>BCA</option>
+          <option>BSc Computer Science</option>
+          <option>BCom</option>
+          <option>BBA</option>
+        </select>
+      </div>
 
-</select>
+      <div class="filter-group">
+        <label for="semester">Semester</label>
+        <select id="semester">
+          <option value="">All Semesters</option>
+          <option>Sem 1</option>
+          <option>Sem 2</option>
+          <option>Sem 3</option>
+          <option>Sem 4</option>
+          <option>Sem 5</option>
+          <option>Sem 6</option>
+        </select>
+      </div>
 
+      <div class="filter-group">
+        <label for="year">Year</label>
+        <select id="year">
+          <option value="">All Years</option>
+          <option>2021</option>
+          <option>2024</option>
+          <option>2025</option>
+          <option>2026</option>
+        </select>
+      </div>
 
-<select id="university">
+    </div>
 
-<option value="">
-All Universities
-</option>
+    <div class="filter-footer">
+      <button class="btn-search" onclick="loadPapers()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Search Papers
+      </button>
+    </div>
+  </div>
 
-<option>
-Kerala University
-</option>
-
-<option>
-MG University
-</option>
-
-<option>
-Calicut University
-</option>
-
-<option>
-Kannur University
-</option>
-
-</select>
-
-
-<select id="course">
-
-<option value="">
-All Courses
-</option>
-
-<option>BCA</option>
-
-<option>
-BSc Computer Science
-</option>
-
-<option>BCom</option>
-
-<option>BBA</option>
-
-</select>
-
-
-<select id="semester">
-
-<option value="">
-All Semester
-</option>
-
-<option>Sem 1</option>
-<option>Sem 2</option>
-<option>Sem 3</option>
-<option>Sem 4</option>
-<option>Sem 5</option>
-<option>Sem 6</option>
-
-</select>
-
-<select id="year">
-
-<option value="">
-All Years
-</option>
-
-<option>2021</option>
-<option>2024</option>
-<option>2025</option>
-<option>2026</option>
-
-</select>
-
-<button onclick="loadPapers()">
-
-Search
-
-</button>
-
-
-<div id="papers">
-
-</div>
+  <div id="papers"></div>
 
 </div>
 
 <script src="script.js"></script>
-
 <script>
+  /* Dark mode toggle */
+  const toggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
 
-loadPapers()
+  const saved = localStorage.getItem('qv-theme');
+  if (saved) root.setAttribute('data-theme', saved);
+
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('qv-theme', next);
+  });
 
 </script>
 
