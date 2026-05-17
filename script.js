@@ -188,7 +188,7 @@ prompt(
 "Enter Admin Password"
 );
 
-if(password!=="hostlane123"){
+if(password!== env.ADMIN_PASSWORD){
 
 alert(
 "Wrong password"
