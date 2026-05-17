@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>QuesVault</title>
 
@@ -15,34 +16,112 @@
 
 <h1>QuesVault</h1>
 
-<p>Download Previous Year Question Papers</p>
+<p>Question Paper Portal</p>
+
+<a href="admin.html">
+<button>Admin Upload</button>
+</a>
 
 </header>
 
 <div class="container">
 
-<div class="paper">
+<h2>Find Question Papers</h2>
 
-<h2>🏫 Schools</h2>
+<select id="category">
 
-<a href="schools.html">
-<button>Open</button>
-</a>
+<option value="">All Categories</option>
+
+<option value="school">
+School
+</option>
+
+<option value="university">
+University
+</option>
+
+</select>
+
+
+<select id="university">
+
+<option value="">
+All Universities
+</option>
+
+<option>
+Kerala University
+</option>
+
+<option>
+MG University
+</option>
+
+<option>
+Calicut University
+</option>
+
+<option>
+Kannur University
+</option>
+
+</select>
+
+
+<select id="course">
+
+<option value="">
+All Courses
+</option>
+
+<option>BCA</option>
+
+<option>
+BSc Computer Science
+</option>
+
+<option>BCom</option>
+
+<option>BBA</option>
+
+</select>
+
+
+<select id="semester">
+
+<option value="">
+All Semester
+</option>
+
+<option>Sem 1</option>
+<option>Sem 2</option>
+<option>Sem 3</option>
+<option>Sem 4</option>
+<option>Sem 5</option>
+<option>Sem 6</option>
+
+</select>
+
+<button onclick="loadPapers()">
+
+Search
+
+</button>
+
+
+<div id="papers">
 
 </div>
 
-<div class="paper">
-
-<h2>🎓 Universities</h2>
-
-<a href="universities.html">
-<button>Open</button>
-</a>
-
 </div>
 
-</div>
+<script src="script.js"></script>
+
+<script>
+
+loadPapers()
+
+</script>
 
 </body>
-
 </html>
