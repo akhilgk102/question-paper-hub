@@ -7,10 +7,21 @@ alert("Select PDF");
 return;
 }
 
-let category=document.getElementById("category")?.value || "";
-let university=document.getElementById("university")?.value || "";
-let course=document.getElementById("course")?.value || "";
-let semester=document.getElementById("semester")?.value || "";
+let category=
+document.getElementById("category").value;
+
+let university=
+document.getElementById("university").value;
+
+let course=
+document.getElementById("course").value;
+
+let semester=
+document.getElementById("semester").value;
+
+let year=
+document.getElementById("year").value;
+
 
 let response=await fetch("/api/upload",{
 
@@ -20,7 +31,8 @@ headers:{
 category,
 university,
 course,
-semester
+semester,
+year
 },
 
 body:file
@@ -29,7 +41,9 @@ body:file
 
 let data=await response.json();
 
-document.getElementById("msg").innerHTML=data.message;
+document.getElementById(
+"msg"
+).innerHTML=data.message;
 
 }
 

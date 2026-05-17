@@ -2,12 +2,8 @@
 <html>
 
 <head>
-
 <title>Admin Upload</title>
-
-<link rel="stylesheet"
-href="style.css">
-
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -16,24 +12,53 @@ href="style.css">
 
 <h2>Upload Question Paper</h2>
 
-<input
-type="file"
-id="pdf">
+<select id="category">
+<option value="">Select Category</option>
+<option value="school">School</option>
+<option value="university">University</option>
+</select>
+
+<select id="university">
+<option value="">University</option>
+<option>Kerala University</option>
+<option>MG University</option>
+<option>Calicut University</option>
+<option>Kannur University</option>
+</select>
+
+<select id="course">
+<option value="">Course</option>
+<option>BCA</option>
+<option>BSc Computer Science</option>
+<option>BCom</option>
+<option>BBA</option>
+</select>
+
+<select id="semester">
+<option value="">Semester</option>
+<option>Sem 1</option>
+<option>Sem 2</option>
+<option>Sem 3</option>
+<option>Sem 4</option>
+<option>Sem 5</option>
+<option>Sem 6</option>
+</select>
+
+<input type="number"
+id="year"
+placeholder="Year">
+
+<input type="file" id="pdf">
 
 <button onclick="uploadPDF()">
-
 Upload
-
 </button>
 
 <p id="msg"></p>
 
 </div>
 
-<script src="script.js">
-
-</script>
+<script src="script.js"></script>
 
 </body>
-
 </html>
