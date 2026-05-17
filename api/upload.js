@@ -16,82 +16,96 @@ async function getBuffer(req) {
 
 export default async function handler(req, res) {
 
-  if(req.method !== "POST"){
+  if (req.method !== "POST") {
     return res.status(405).json({
-      message:"Method not allowed"
+      message: "Method not allowed"
     });
   }
 
-  try{
+  try {
 
     const buffer = await getBuffer(req);
 
-const uniMap = {
-"Kerala University":"KU",
-"MG University":"MGU",
-"Calicut University":"CU",
-"Kannur University":"KNU"
-};
+    const university = req.headers.university || "";
+    const category = req.headers.category || "";
+    const course = req.headers.course || "";
+    const semester = req.headers.semester || "";
+    const subject = req.headers.subject || "";
+    const year = req.headers.year || "";
 
-const courseMap = {
-"BSc Computer Science":"BSC-CS",
-"BCA":"BCA",
-"BCom":"BCOM",
-"BBA":"BBA"
-};
+    if (!subject) {
+      return res.status(400).json({
+        message: "Subject required"
+      });
+    }
 
-const filename = `${
-uniMap[req.headers.university] || req.headers.category
-}_${
-courseMap[req.headers.course] || ""
-}_${
-req.headers.semester.replace("Sem ","S")
-}_${
-req.headers.subject
-.toUpperCase()
-.replace(/\s+/g,"_")
-}_${
-req.headers.year
-}.pdf`;
+    const uniMap = {
+      "Kerala University":"KU",
+      "MG University":"MGU",
+      "Calicut University":"CU",
+      "Kannur University":"KNU"
+    };
 
-    const content=buffer.toString("base64");
+    const courseMap = {
+      "BSc Computer Science":"BSC-CS",
+      "BCA":"BCA",
+      "BCom":"BCOM",
+      "BBA":"BBA"
+    };
 
-    const githubResponse=await fetch(
+    const filename =
+      `${uniMap[university] || category}` +
+      `_${courseMap[course] || course}` +
+      `_${semester.replace("Sem ","S")}` +
+      `_${subject.toUpperCase().replace(/\s+/g,"_")}` +
+      `_${year}.pdf`;
+
+    const content = buffer.toString("base64");
+
+    // ADD HERE ↓↓↓
+console.log({
+  username: process.env.GITHUB_USERNAME,
+  repo: process.env.GITHUB_REPO,
+  tokenExists: !!process.env.GITHUB_TOKEN,
+  filename
+});
+
+    const githubResponse = await fetch(
       `https://api.github.com/repos/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}/contents/pdf/${filename}`,
       {
-        method:"PUT",
-
-        headers:{
-          Authorization:`token ${process.env.GITHUB_TOKEN}`,
-          Accept:"application/vnd.github+json",
-          "Content-Type":"application/json"
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json"
         },
-
-        body:JSON.stringify({
-          message:`Added ${filename}`,
-          content:content
+        body: JSON.stringify({
+          message: `Added ${filename}`,
+          content
         })
       }
     );
 
-    const data=await githubResponse.json();
+    const data = await githubResponse.json();
 
-    if(!githubResponse.ok){
-      return res.status(500).json({
-        message:data.message
-      });
-    }
+if (!githubResponse.ok) {
+
+  console.log("GitHub Error:", data);
+
+  return res.status(500).json({
+    message: JSON.stringify(data)
+  });
+}
 
     return res.status(200).json({
-      message:"PDF uploaded successfully"
+      message: "PDF uploaded successfully"
     });
 
-  }catch(error){
+  } catch(error) {
 
     return res.status(500).json({
-      message:error.message
+      message: error.message
     });
 
   }
-
 }

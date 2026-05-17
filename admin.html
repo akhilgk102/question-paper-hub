@@ -1,71 +1,549 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="light">
 
 <head>
-<title>Admin Upload</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Upload — QuesVault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  :root {
+    --bg-primary:    #F9F7F2;
+    --bg-secondary:  #FFFFFF;
+    --bg-card:       #FFFFFF;
+    --text-primary:  #1A1816;
+    --text-secondary:#6B6760;
+    --text-muted:    #A09D99;
+    --accent:        #C4531A;
+    --accent-light:  #FAECE7;
+    --accent-mid:    #E87240;
+    --border:        #E8E4DC;
+    --border-focus:  #C4531A;
+    --shadow-sm:     0 1px 3px rgba(26,24,22,0.06);
+    --shadow-md:     0 4px 16px rgba(26,24,22,0.08);
+    --shadow-lg:     0 8px 32px rgba(26,24,22,0.10);
+    --header-bg:     #1A1816;
+    --header-text:   #F9F7F2;
+    --header-muted:  #A09D99;
+    --radius-sm:     6px;
+    --radius-md:     10px;
+    --radius-lg:     16px;
+    --transition:    0.2s ease;
+  }
+
+  [data-theme="dark"] {
+    --bg-primary:    #121110;
+    --bg-secondary:  #1E1C1A;
+    --bg-card:       #252220;
+    --text-primary:  #F0EDE8;
+    --text-secondary:#A09D99;
+    --text-muted:    #6B6760;
+    --accent:        #E87240;
+    --accent-light:  #2A1A0F;
+    --accent-mid:    #C4531A;
+    --border:        #2E2B28;
+    --border-focus:  #E87240;
+    --shadow-sm:     0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md:     0 4px 16px rgba(0,0,0,0.4);
+    --shadow-lg:     0 8px 32px rgba(0,0,0,0.5);
+    --header-bg:     #0D0C0B;
+    --header-text:   #F0EDE8;
+    --header-muted:  #6B6760;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  /* ══════════════════════════════════════
+     HEADER — identical to index.html
+  ══════════════════════════════════════ */
+  header {
+    background: var(--header-bg);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .header-brand a {
+    text-decoration: none;
+  }
+
+  .header-brand h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--header-text);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .header-brand p {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--header-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,255,255,0.10);
+    color: var(--header-text);
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--transition), transform 0.1s;
+  }
+
+  .btn-back:hover {
+    background: rgba(255,255,255,0.18);
+    transform: translateY(-1px);
+  }
+
+  .btn-back svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .theme-toggle {
+    width: 46px;
+    height: 26px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.25s;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+  }
+
+  [data-theme="dark"] .theme-toggle {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  [data-theme="dark"] .theme-toggle::after {
+    transform: translateX(20px);
+  }
+
+  .theme-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .theme-icon { font-size: 15px; line-height: 1; }
+  .icon-sun  { color: #F9C74F; }
+  .icon-moon { color: #A09D99; }
+
+  /* ══════════════════════════════════════
+     PAGE BODY
+  ══════════════════════════════════════ */
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+
+  .section-header {
+    margin-bottom: 28px;
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.4px;
+  }
+
+  .accent-rule {
+    width: 36px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 99px;
+    margin: 10px 0 8px;
+  }
+
+  .section-header p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  /* ══════════════════════════════════════
+     UPLOAD CARD
+  ══════════════════════════════════════ */
+  .upload-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 32px 28px 28px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.45s cubic-bezier(.22,.68,0,1.2) both;
+  }
+
+  .upload-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    margin-top: 18px;
+  }
+
+  .field-label:first-of-type { margin-top: 0; }
+
+  select,
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background var(--transition), color var(--transition);
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6760' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  select:hover, input:hover { border-color: var(--text-muted); }
+
+  select:focus, input:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(196,83,26,0.10);
+  }
+
+  .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .file-wrap { position: relative; }
+
+  input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+  }
+
+  .file-display {
+    width: 100%;
+    padding: 24px 14px;
+    background: var(--bg-primary);
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .file-wrap:hover .file-display,
+  .file-wrap:focus-within .file-display {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .file-display svg { width: 28px; height: 28px; color: var(--accent); opacity: 0.7; }
+
+  .file-display .file-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .file-display .file-name {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    display: none;
+    text-align: center;
+    word-break: break-all;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0 20px;
+  }
+
+  .btn-upload {
+    width: 100%;
+    padding: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(196,83,26,0.25);
+    transition: background var(--transition), transform 0.1s, box-shadow 0.1s;
+  }
+
+  .btn-upload:hover {
+    background: var(--accent-mid);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(196,83,26,0.3);
+  }
+
+  .btn-upload:active { transform: translateY(0); box-shadow: none; }
+  .btn-upload svg { width: 16px; height: 16px; }
+
+  #msg {
+    margin-top: 14px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--accent);
+    min-height: 18px;
+  }
+
+  @media (max-width: 600px) {
+    .header-inner { padding: 16px 20px; flex-wrap: wrap; }
+    .container { padding: 36px 18px 60px; }
+    .upload-card { padding: 24px 18px 20px; }
+    .row-2 { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 
 <body>
 
-<div class="box">
+<header>
+  <div class="header-inner">
+    <div class="header-brand">
+      <a href="index.html"><h1>QuesVault</h1></a>
+      <p>Question Paper Portal</p>
+    </div>
+    <div class="header-actions">
+      <div class="theme-toggle-wrap">
+        <span class="theme-icon icon-sun" aria-hidden="true">☀</span>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"></button>
+        <span class="theme-icon icon-moon" aria-hidden="true">☽</span>
+      </div>
+      <a href="index.html" class="btn-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Back
+      </a>
+    </div>
+  </div>
+</header>
 
-<h2>Upload Question Paper</h2>
+<div class="container">
 
-<select id="category">
-<option value="">Select Category</option>
-<option value="school">School</option>
-<option value="university">University</option>
-</select>
+  <div class="section-header">
+    <h2>Upload Question Paper</h2>
+    <div class="accent-rule"></div>
+    <p>Add a new paper to the vault</p>
+  </div>
 
-<select id="university">
-<option value="">University</option>
-<option>Kerala University</option>
-<option>MG University</option>
-<option>Calicut University</option>
-<option>Kannur University</option>
-</select>
+  <div class="upload-card">
 
-<select id="course">
-<option value="">Course</option>
-<option>BCA</option>
-<option>BSc Computer Science</option>
-<option>BCom</option>
-<option>BBA</option>
-</select>
+    <label class="field-label">Category</label>
+    <select id="category">
+      <option value="">Select Category</option>
+      <option value="school">School</option>
+      <option value="university">University</option>
+    </select>
 
-<select id="semester">
-<option value="">Semester</option>
-<option>Sem 1</option>
-<option>Sem 2</option>
-<option>Sem 3</option>
-<option>Sem 4</option>
-<option>Sem 5</option>
-<option>Sem 6</option>
-</select>
+    <label class="field-label">University</label>
+    <select id="university">
+      <option value="">Select University</option>
+      <option>Kerala University</option>
+      <option>MG University</option>
+      <option>Calicut University</option>
+      <option>Kannur University</option>
+    </select>
 
-<input type="number"
-id="year"
-placeholder="Year">
+    <div class="row-2">
+      <div>
+        <label class="field-label">Course</label>
+        <select id="course">
+          <option value="">Select Course</option>
+          <option>BCA</option>
+          <option>BSc Computer Science</option>
+          <option>BCom</option>
+          <option>BBA</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">Semester</label>
+        <select id="semester">
+          <option value="">Select Sem</option>
+          <option>Sem 1</option>
+          <option>Sem 2</option>
+          <option>Sem 3</option>
+          <option>Sem 4</option>
+          <option>Sem 5</option>
+          <option>Sem 6</option>
+        </select>
+      </div>
+    </div>
 
-<input
-type="text"
-id="subject"
-placeholder="Enter Subject Name">
+    <div class="row-2">
+      <div>
+        <label class="field-label">Year</label>
+        <input type="number" id="year" placeholder="e.g. 2024">
+      </div>
+      <div>
+        <label class="field-label">Subject</label>
+        <input type="text" id="subject" placeholder="Subject name">
+      </div>
+    </div>
 
-<input type="file" id="pdf">
+    <label class="field-label">PDF File</label>
+    <div class="file-wrap">
+      <input type="file" id="pdf" accept=".pdf" onchange="updateFileName(this)">
+      <div class="file-display">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="11" x2="12" y2="17"/>
+          <line x1="9" y1="14" x2="15" y2="14"/>
+        </svg>
+        <span class="file-hint">Click to choose a PDF</span>
+        <span class="file-name" id="fileName"></span>
+      </div>
+    </div>
 
-<button onclick="uploadPDF()">
-Upload
-</button>
+    <div class="divider"></div>
 
-<p id="msg"></p>
+    <button class="btn-upload" onclick="uploadPDF()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      Upload Paper
+    </button>
 
+    <p id="msg"></p>
+
+  </div>
 </div>
 
 <script src="script.js"></script>
+<script>
+  /* Dark mode — synced with index.html via localStorage */
+  const toggle = document.getElementById('themeToggle');
+  const root   = document.documentElement;
 
+  const saved = localStorage.getItem('qv-theme');
+  if (saved) root.setAttribute('data-theme', saved);
 
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('qv-theme', next);
+  });
+
+  function updateFileName(input) {
+    const name = input.files[0]?.name || '';
+    const el   = document.getElementById('fileName');
+    const hint = document.querySelector('.file-hint');
+    if (name) {
+      el.textContent     = name;
+      el.style.display   = 'block';
+      hint.style.display = 'none';
+    } else {
+      el.style.display   = 'none';
+      hint.style.display = 'block';
+    }
+  }
+</script>
 
 </body>
 </html>
