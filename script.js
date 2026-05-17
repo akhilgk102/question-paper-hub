@@ -56,8 +56,6 @@ document.getElementById(
 
 }
 
-
-
 async function loadPapers(){
 
 try{
@@ -68,74 +66,103 @@ const response=await fetch(
 
 const files=await response.json();
 
-const category=
-document.getElementById("category").value;
+const universityMap={
 
-const university=
+"Kerala University":"KU",
+"MG University":"MGU",
+"Calicut University":"CU",
+"Kannur University":"KNU"
+
+};
+
+const courseMap={
+
+"BSc Computer Science":"BSC-CS",
+"BCA":"BCA",
+"BCom":"BCOM",
+"BBA":"BBA"
+
+};
+
+let university=
 document.getElementById("university").value;
 
-const course=
+let course=
 document.getElementById("course").value;
 
-const semester=
+let semester=
 document.getElementById("semester").value;
 
-const year=
+let year=
 document.getElementById("year").value;
 
-let papers=document.getElementById("papers");
+
+university=
+universityMap[university] || "";
+
+course=
+courseMap[course] || "";
+
+semester=
+semester.replace("Sem ","S");
+
+let papers=
+document.getElementById("papers");
 
 papers.innerHTML="";
 
+
 files.forEach(file=>{
 
-let name=file.name
-.toLowerCase()
-.replace(/[_\-\s]+/g,"");
-
-let uni=university
-.toLowerCase()
-.replace(/[_\-\s]+/g,"");
-
-let cour=course
-.toLowerCase()
-.replace(/[_\-\s]+/g,"");
-
-let sem=semester
-.toLowerCase()
-.replace(/[_\-\s]+/g,"");
-
-let yr=year
-.toLowerCase()
-.replace(/[_\-\s]+/g,"");
+let name=
+file.name.toUpperCase();
 
 if(
-(uni && !name.includes(uni)) ||
-(cour && !name.includes(cour)) ||
-(sem && !name.includes(sem.replace("sem","s"))) ||
-(yr && !name.includes(yr))
+
+(university && !name.includes(university))
+||
+
+(course && !name.includes(course))
+||
+
+(semester && !name.includes(semester))
+||
+
+(year && !name.includes(year))
+
 ){
+
 return;
+
 }
 
-papers.innerHTML += `
+
+papers.innerHTML +=`
 
 <div class="paper">
 
-<h3>📄 ${file.name}</h3>
+<h3>
+
+📄 ${file.name}
+
+</h3>
 
 <div class="btns">
 
 <a href="https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(file.download_url)}"
 target="_blank">
 
-<button>View</button>
+<button>
+View
+</button>
 
 </a>
 
 <a href="${file.download_url}" download>
 
-<button>Download</button>
+<button>
+Download
+</button>
 
 </a>
 
