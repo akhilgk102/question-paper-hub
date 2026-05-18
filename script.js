@@ -175,40 +175,201 @@ papers.innerHTML = `
   }
 }
 
-async function deletePaper(filename){
 
-const password=prompt(
-"Enter Admin Password"
-);
 
-if(!password)return;
+function showDeleteModal(filename) {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.style.cssText = `
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.15s ease;
+    `;
 
-const response=await fetch(
-"/api/delete",
-{
+    overlay.innerHTML = `
+      <style>
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .del-modal {
+          background: var(--bg-card);
+          border: 1px solid var(--border);
+          border-radius: 20px;
+          padding: 28px 28px 24px;
+          width: 100%;
+          max-width: 380px;
+          box-shadow: 0 24px 64px rgba(0,0,0,0.30);
+          animation: slideUp 0.2s cubic-bezier(.22,.68,0,1.2) both;
+        }
+        .del-modal-icon {
+          width: 48px; height: 48px;
+          background: #fff0f0;
+          border-radius: 12px;
+          display: flex; align-items: center; justify-content: center;
+          margin-bottom: 16px;
+        }
+        .del-modal-icon svg { width: 22px; height: 22px; stroke: #d32f2f; }
+        .del-modal h3 {
+          font-size: 17px; font-weight: 600;
+          color: var(--text-primary);
+          margin-bottom: 6px;
+        }
+        .del-modal p {
+          font-size: 13px; color: var(--text-secondary);
+          margin-bottom: 20px; line-height: 1.5;
+        }
+        .del-modal-file {
+          font-size: 11px; font-weight: 600;
+          color: var(--text-muted);
+          background: var(--bg-primary);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 6px 10px;
+          margin-bottom: 20px;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .del-modal input {
+          width: 100%;
+          padding: 11px 14px;
+          background: var(--bg-primary);
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          font-size: 14px;
+          color: var(--text-primary);
+          outline: none;
+          margin-bottom: 16px;
+          transition: border-color 0.15s, box-shadow 0.15s;
+          font-family: inherit;
+        }
+        .del-modal input:focus {
+          border-color: #d32f2f;
+          box-shadow: 0 0 0 3px rgba(211,47,47,0.12);
+        }
+        .del-modal input::placeholder { color: var(--text-muted); }
+        .del-modal-btns {
+          display: flex; gap: 8px;
+        }
+        .del-btn-cancel {
+          flex: 1; height: 40px;
+          background: var(--bg-primary);
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          font-size: 13px; font-weight: 500;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: background 0.15s;
+          font-family: inherit;
+        }
+        .del-btn-cancel:hover { background: var(--border); }
+        .del-btn-confirm {
+          flex: 1; height: 40px;
+          background: #d32f2f;
+          border: none;
+          border-radius: 10px;
+          font-size: 13px; font-weight: 600;
+          color: #fff;
+          cursor: pointer;
+          transition: background 0.15s, transform 0.1s;
+          font-family: inherit;
+          display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .del-btn-confirm:hover { background: #b71c1c; }
+        .del-btn-confirm:active { transform: scale(0.97); }
+        .del-btn-confirm svg { width: 14px; height: 14px; stroke: #fff; }
+      </style>
 
-method:"POST",
+      <div class="del-modal">
+        <div class="del-modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4h6v2"/>
+          </svg>
+        </div>
+        <h3>Delete Paper</h3>
+        <p>This action cannot be undone. Enter the admin password to confirm.</p>
+        <div class="del-modal-file">${filename}</div>
+        <input type="password" id="del-password-input" placeholder="Admin password" autocomplete="off" />
+        <div class="del-modal-btns">
+          <button class="del-btn-cancel" id="del-cancel">Cancel</button>
+          <button class="del-btn-confirm" id="del-confirm">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              <path d="M10 11v6M14 11v6"/>
+              <path d="M9 6V4h6v2"/>
+            </svg>
+            Delete
+          </button>
+        </div>
+      </div>
+    `;
 
-headers:{
-"Content-Type":"application/json"
-},
+    document.body.appendChild(overlay);
 
-body:JSON.stringify({
-filename,
-password
-})
+    const input = overlay.querySelector("#del-password-input");
+    const cancelBtn = overlay.querySelector("#del-cancel");
+    const confirmBtn = overlay.querySelector("#del-confirm");
 
+    setTimeout(() => input.focus(), 100);
+
+    const close = (value) => {
+      overlay.remove();
+      resolve(value);
+    };
+
+    cancelBtn.addEventListener("click", () => close(null));
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) close(null); });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") confirmBtn.click();
+      if (e.key === "Escape") close(null);
+    });
+    confirmBtn.addEventListener("click", () => {
+      const val = input.value.trim();
+      if (!val) { input.focus(); input.style.borderColor = "#d32f2f"; return; }
+      close(val);
+    });
+  });
 }
-);
 
-const data=await response.json();
+async function deletePaper(filename) {
+  const password = await showDeleteModal(filename);
+  if (!password) return;
 
-alert(data.message);
+  const response = await fetch("/api/delete", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ filename, password })
+  });
 
-if(response.ok){
+  const data = await response.json();
 
-loadPapers();
-
+  if (response.ok) {
+    showToast("Deleted successfully", "success");
+    loadPapers();
+  } else {
+    showToast(data.message || "Delete failed", "error");
+  }
 }
 
+function showToast(message, type = "success") {
+  const toast = document.createElement("div");
+  toast.style.cssText = `
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 99999;
+    background: ${type === "success" ? "#1a1816" : "#d32f2f"};
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px; font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    animation: fadeIn 0.2s ease;
+    white-space: nowrap;
+  `;
+  toast.textContent = type === "success" ? "✓  " + message : "✕  " + message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }

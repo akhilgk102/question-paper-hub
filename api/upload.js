@@ -62,13 +62,7 @@ export default async function handler(req, res) {
 
     const content = buffer.toString("base64");
 
-    // ADD HERE ↓↓↓
-console.log({
-  username: process.env.GITHUB_USERNAME,
-  repo: process.env.GITHUB_REPO,
-  tokenExists: !!process.env.GITHUB_TOKEN,
-  filename
-});
+
 
     const githubResponse = await fetch(
       `https://api.github.com/repos/${process.env.GITHUB_USERNAME}/${process.env.GITHUB_REPO}/contents/pdf/${filename}`,
