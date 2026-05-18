@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
+  /* ── CSS VARIABLES ── */
   :root {
     --bg-primary: #F9F7F2;
     --bg-secondary: #FFFFFF;
@@ -53,15 +54,8 @@
     --header-muted: #6B6760;
   }
 
-  *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
 
   body {
     font-family: 'DM Sans', sans-serif;
@@ -71,159 +65,363 @@
     transition: background var(--transition), color var(--transition);
   }
 
-  /* ── HEADER ── */
+  /* ══════════════════════════════════════
+     HEADER — fully self-contained, wins
+     over any style.css header rules
+  ══════════════════════════════════════ */
   header {
-    background: var(--header-bg);
-    padding: 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: var(--header-bg) !important;
+    padding: 0 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+    width: 100% !important;
   }
 
-  .header-inner {
-    max-width: 900px;
+  /* Top bar row */
+  .qv-topbar {
+    width: 100%;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 20px 32px;
+    padding: 0 24px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-  }
-
-  .header-brand h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--header-text);
-    letter-spacing: -0.5px;
-    line-height: 1;
-  }
-
-  .header-brand p {
-    font-size: 11px;
-    font-weight: 300;
-    color: var(--header-muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 3px;
-  }
-
-  .header-actions {
-    display: flex;
-    align-items: center;
     gap: 12px;
   }
 
-  .btn-admin {
+  /* Brand */
+  .qv-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .qv-brand img {
+    height: 40px;
+    display: block;
+  }
+
+  /* Desktop nav — hidden on mobile */
+  .qv-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .qv-nav-link {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 9px 18px;
-    border-radius: var(--radius-sm);
+    gap: 5px;
+    color: rgba(249,247,242,0.70);
+    font-size: 14px;
+    font-weight: 400;
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
+    padding: 7px 12px;
+    border-radius: 6px;
     cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    white-space: nowrap;
+    border: none;
+    background: none;
     text-decoration: none;
-    transition: background var(--transition), transform 0.1s;
   }
 
-  .btn-admin:hover {
-    background: var(--accent-mid);
-    transform: translateY(-1px);
+  .qv-nav-link:hover,
+  .qv-nav-item.open > .qv-nav-link {
+    color: #fff;
+    background: rgba(255,255,255,0.07);
   }
 
-  .btn-admin:active {
+  .qv-nav-link.active {
+    color: var(--accent-mid);
+    background: rgba(196,83,26,0.14);
+  }
+
+  .qv-chevron {
+    width: 13px; height: 13px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .qv-nav-item.open > .qv-nav-link .qv-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Dropdown */
+  .qv-nav-item { position: relative; }
+
+  .qv-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    background: #252220;
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 10px;
+    padding: 8px;
+    min-width: 220px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s, transform 0.18s;
+    z-index: 10000;
+  }
+
+  .qv-dropdown-wide { min-width: 368px; }
+
+  .qv-nav-item.open > .qv-dropdown {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Last item anchors to right */
+  .qv-nav-item:last-child .qv-dropdown {
+    left: auto; right: 0;
+    transform: translateY(-6px);
+  }
+  .qv-nav-item:last-child.open .qv-dropdown {
     transform: translateY(0);
   }
 
-  .btn-admin svg {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
+  .qv-drop-label {
+    display: block;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    color: rgba(160,157,153,0.60);
+    padding: 8px 10px 4px;
+    font-family: 'DM Sans', sans-serif;
   }
 
-  /* ── DARK MODE TOGGLE ── */
-  .theme-toggle {
-    width: 46px;
-    height: 26px;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 999px;
+  .qv-drop-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px;
+    border-radius: 6px;
     cursor: pointer;
-    position: relative;
-    transition: background 0.25s;
+    transition: background 0.12s;
+    color: rgba(240,237,232,0.82);
+    font-size: 13.5px; font-weight: 400;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    border: none; background: none;
+    width: 100%; text-align: left;
+  }
+
+  .qv-drop-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+
+  .qv-drop-icon {
+    width: 32px; height: 32px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
 
-  .theme-toggle::after {
+  .qv-drop-icon svg {
+    width: 15px; height: 15px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .di-orange { background: rgba(196,83,26,0.22);   color: #E87240; }
+  .di-blue   { background: rgba(55,138,221,0.20);  color: #7EB8F0; }
+  .di-teal   { background: rgba(29,158,117,0.20);  color: #5DCAA5; }
+  .di-purple { background: rgba(127,119,221,0.20); color: #AFA9EC; }
+  .di-amber  { background: rgba(239,159,39,0.20);  color: #EF9F27; }
+  .di-pink   { background: rgba(212,83,126,0.20);  color: #ED93B1; }
+
+  .qv-drop-text strong {
+    display: block; font-size: 13.5px; font-weight: 500;
+    color: rgba(240,237,232,0.92); line-height: 1.2;
+        font-family: 'DM Sans', sans-serif;
+
+  }
+
+  .qv-drop-text span {
+    font-size: 12.5px; color: rgba(160,157,153,0.65);
+    line-height: 1.3; display: block; margin-top: 1px;
+        font-family: 'DM Sans', sans-serif;
+
+  }
+
+  .qv-drop-divider {
+    height: 1px; background: rgba(255,255,255,0.08); margin: 6px 8px;
+  }
+
+  .qv-drop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+
+  /* Right controls */
+  .qv-right {
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  }
+
+  /* Theme toggle */
+  .qv-theme-btn {
+    width: 44px; height: 24px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 999px; cursor: pointer;
+    position: relative; flex-shrink: 0;
+    transition: background 0.25s;
+  }
+
+  .qv-theme-btn::after {
     content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
+    position: absolute; top: 3px; left: 3px;
+    width: 16px; height: 16px; border-radius: 50%;
     background: #fff;
-    transition: transform 0.25s cubic-bezier(.4,0,.2,1), background 0.25s;
+    transition: transform 0.22s cubic-bezier(.4,0,.2,1);
   }
 
-  [data-theme="dark"] .theme-toggle {
-    background: var(--accent);
-    border-color: var(--accent);
+  [data-theme="dark"] .qv-theme-btn { background: var(--accent); border-color: var(--accent); }
+  [data-theme="dark"] .qv-theme-btn::after { transform: translateX(20px); }
+
+  /* Admin button */
+  .qv-admin-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--accent); color: #fff; border: none;
+    padding: 8px 15px; border-radius: 6px;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; white-space: nowrap; text-decoration: none;
+    transition: background 0.15s, transform 0.1s;
   }
 
-  [data-theme="dark"] .theme-toggle::after {
-    transform: translateX(20px);
-    background: #fff;
+  .qv-admin-btn:hover { background: var(--accent-mid); transform: translateY(-1px); }
+  .qv-admin-btn:active { transform: translateY(0); }
+
+  .qv-admin-btn svg {
+    width: 14px; height: 14px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
   }
 
-  .theme-toggle-wrap {
-    display: flex;
+  /* ── HAMBURGER BUTTON ── */
+  .qv-hamburger {
+    display: none;               /* hidden on desktop */
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+    flex-shrink: 0;
+    transition: background 0.15s;
   }
 
-  .theme-icon {
+  .qv-hamburger:hover { background: rgba(255,255,255,0.14); }
+
+  .qv-hamburger svg {
+    width: 20px; height: 20px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2; stroke-linecap: round;
+  }
+
+  /* ── MOBILE DRAWER ── */
+  .qv-drawer {
+    /* Hidden by default — shown only when .open is added by JS */
+    display: none;
+    flex-direction: column;
+    background: #1A1816;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 16px 20px;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .qv-drawer.open { display: flex; }
+
+  .qv-drawer-section { margin-top: 12px; }
+
+  .qv-drawer-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 1.4px; text-transform: uppercase;
+    color: rgba(160,157,153,0.55);
+    padding: 4px 6px 2px;
+    font-family: 'DM Sans', sans-serif;
+    display: block;
+  }
+
+  .qv-drawer-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 6px;
+    color: rgba(240,237,232,0.80);
     font-size: 15px;
-    line-height: 1;
-    transition: opacity 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.12s, color 0.12s;
+    border: none; background: none; width: 100%; cursor: pointer; text-align: left;
   }
 
-  .icon-sun { color: #F9C74F; }
-  .icon-moon { color: #A09D99; }
+  .qv-drawer-link:hover { background: rgba(255,255,255,0.06); color: #fff; }
 
-  /* ── MAIN CONTAINER ── */
+  .qv-drawer-link svg {
+    width: 18px; height: 18px;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    opacity: 0.55; flex-shrink: 0;
+  }
+
+  .qv-drawer-divider {
+    height: 1px; background: rgba(255,255,255,0.07); margin: 8px 0;
+  }
+
+  /* ══════════════════════════════════════
+     SHOW / HIDE NAV vs HAMBURGER
+  ══════════════════════════════════════ */
+  @media (min-width: 821px) {
+    .qv-hamburger { display: none !important; }
+    .qv-nav      { display: flex !important; }
+    .qv-drawer   { display: none !important; }
+  }
+
+  @media (max-width: 820px) {
+    .qv-nav       { display: none !important; }
+    .qv-hamburger { display: flex !important; }
+  }
+
+  @media (max-width: 500px) {
+    .qv-admin-btn .qv-admin-label { display: none; }
+    .qv-topbar { padding: 0 16px; }
+  }
+
+  /* ══════════════════════════════════════
+     MAIN CONTENT (unchanged from original)
+  ══════════════════════════════════════ */
   .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 48px 32px 80px;
   }
 
-  .section-header {
-    margin-bottom: 36px;
-  }
+  .section-header { margin-bottom: 36px; }
 
   .section-header h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--text-primary);
-    letter-spacing: -0.5px;
+    font-size: 28px; font-weight: 600;
+    color: var(--text-primary); letter-spacing: -0.5px;
   }
 
   .section-header p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-top: 6px;
-    font-weight: 300;
+    font-size: 14px; color: var(--text-secondary);
+    margin-top: 6px; font-weight: 300;
   }
 
-  /* ── FILTER CARD ── */
+  .accent-rule {
+    width: 40px; height: 3px;
+    background: var(--accent); border-radius: 99px; margin: 10px 0 0;
+  }
+
   .filter-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -236,195 +434,311 @@
   .filter-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 14px;
-    margin-bottom: 20px;
+    gap: 14px; margin-bottom: 20px;
   }
 
-  .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: center;
-  }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; align-items: center; }
 
   .filter-group label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text-muted);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: .5px; text-transform: uppercase; color: var(--text-muted);
   }
 
   select {
-    width: 100%;
-    padding: 10px 14px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
+    width: 100%; padding: 10px 14px;
+    background: var(--bg-primary); border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text-primary);
-    cursor: pointer;
-    appearance: none;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-primary);
+    cursor: pointer; appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6760' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 36px;
+    background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
     transition: border-color 0.15s, box-shadow 0.15s, background var(--transition), color var(--transition);
-    
   }
 
-  select:hover {
-    border-color: var(--text-muted);
-  }
-
-  select:focus {
-    outline: none;
-    border-color: var(--border-focus);
-    box-shadow: 0 0 0 3px rgba(196,83,26,0.1);
-  }
+  select:hover { border-color: var(--text-muted); }
+  select:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(196,83,26,0.1); }
 
   .filter-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-top: 4px;
-    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-top: 4px; border-top: 1px solid var(--border);
   }
 
   .btn-search {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 11px 28px;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #fff; border: none;
+    padding: 11px 28px; border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
     cursor: pointer;
     transition: background var(--transition), transform 0.1s, box-shadow 0.1s;
     box-shadow: 0 2px 8px rgba(196,83,26,0.25);
   }
 
-  .btn-search:hover {
-    background: var(--accent-mid);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(196,83,26,0.3);
-  }
+  .btn-search:hover { background: var(--accent-mid); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(196,83,26,0.3); }
+  .btn-search:active { transform: translateY(0); box-shadow: none; }
+  .btn-search svg { width: 16px; height: 16px; }
 
-  .btn-search:active {
-    transform: translateY(0);
-    box-shadow: none;
-  }
-
-  .btn-search svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  /* ── RESULTS ── */
-  #papers {
-    margin-top: 36px;
-  }
+  #papers { margin-top: 36px; }
 
   .results-label {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 16px;
-    display: block;
+    font-size: 12px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 16px; display: block;
   }
 
-  /* Paper cards injected by script.js will pick up body color vars */
-  /* Provide baseline card styles script.js can use */
   .paper-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 18px 20px;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow-sm);
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 18px 20px;
+    margin-bottom: 12px; box-shadow: var(--shadow-sm);
     transition: box-shadow 0.15s, transform 0.15s;
   }
 
-  .paper-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-  }
+  .paper-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
 
-  /* ── DECORATIVE ACCENT LINE ── */
-  .accent-rule {
-    width: 40px;
-    height: 3px;
-    background: var(--accent);
-    border-radius: 99px;
-    margin: 10px 0 0;
-  }
-
-  /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
-    .header-inner {
-      padding: 16px 20px;
-      flex-wrap: wrap;
-    }
-
-    .container {
-      padding: 32px 20px 60px;
-    }
-
-    .filter-card {
-      padding: 20px 18px 18px;
-    }
-
-    .filter-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .header-brand h1 {
-      font-size: 22px;
-    }
+    .container { padding: 32px 20px 60px; }
+    .filter-card { padding: 20px 18px 18px; }
+    .filter-grid { grid-template-columns: 1fr 1fr; }
   }
 
   @media (max-width: 400px) {
-    .filter-grid {
-      grid-template-columns: 1fr;
-    }
+    .filter-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
+<!-- ══════════════════════════════════════
+     HEADER
+══════════════════════════════════════ -->
 <header>
-  <div class="header-inner">
-    <div class="header-brand">
-      <h1>QuesVault</h1>
-      <!-- <p>Question Paper Portal</p> -->
-    </div>
-    <div class="header-actions">
-      <div class="theme-toggle-wrap">
-        <span class="theme-icon icon-sun" aria-hidden="true">☀</span>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
-        <span class="theme-icon icon-moon" aria-hidden="true">☽</span>
+
+  <!-- Top bar: brand | desktop-nav | right controls -->
+  <div class="qv-topbar">
+
+    <a class="qv-brand" href="index.html">
+      <img src="./img/4.png" alt="QuesVault">
+    </a>
+
+    <!-- ── DESKTOP NAV ── -->
+    <nav class="qv-nav" id="qvDesktopNav">
+
+      <div class="qv-nav-item">
+        <a class="qv-nav-link active" href="index.html">Home</a>
       </div>
+
+      <!-- Question Papers -->
+      <div class="qv-nav-item" id="ddPapers">
+        <button class="qv-nav-link" onclick="toggleDD('ddPapers')" aria-haspopup="true" aria-expanded="false">
+          Question Papers
+          <svg class="qv-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="qv-dropdown qv-dropdown-wide">
+          <span class="qv-drop-label">Browse by category</span>
+          <a class="qv-drop-item" href="#" onclick="qvFilter('category','university'); closeDD(); loadPapers(); return false;">
+            <div class="qv-drop-icon di-orange">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="qv-drop-text"><strong>University Papers</strong><span>Kerala, MG, Calicut, Kannur</span></div>
+          </a>
+          <a class="qv-drop-item" href="#" onclick="qvFilter('category','school'); closeDD(); loadPapers(); return false;">
+            <div class="qv-drop-icon di-blue">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6M3 15h6"/></svg>
+            </div>
+            <div class="qv-drop-text"><strong>School Papers</strong><span>Classes 8–12, board exams</span></div>
+          </a>
+          <div class="qv-drop-divider"></div>
+          <span class="qv-drop-label">Filter by</span>
+          <div class="qv-drop-grid">
+            <a class="qv-drop-item" href="#" onclick="qvFocus('year'); closeDD(); return false;">
+              <div class="qv-drop-icon di-teal">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div class="qv-drop-text"><strong>By Year</strong><span>2021–2026</span></div>
+            </a>
+            <a class="qv-drop-item" href="#" onclick="qvFocus('course'); closeDD(); return false;">
+              <div class="qv-drop-icon di-purple">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20"/></svg>
+              </div>
+              <div class="qv-drop-text"><strong>By Course</strong><span>BCA, BSc, BCom…</span></div>
+            </a>
+            <a class="qv-drop-item" href="#" onclick="qvFocus('semester'); closeDD(); return false;">
+              <div class="qv-drop-icon di-amber">
+                <svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+              </div>
+              <div class="qv-drop-text"><strong>By Semester</strong><span>Sem 1–6</span></div>
+            </a>
+            <a class="qv-drop-item" href="#" onclick="qvFilter('year','2025'); closeDD(); loadPapers(); return false;">
+              <div class="qv-drop-icon di-pink">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <div class="qv-drop-text"><strong>Recent</strong><span>2024 &amp; 2025</span></div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Study Notes -->
+      <div class="qv-nav-item" id="ddNotes">
+        <button class="qv-nav-link" onclick="toggleDD('ddNotes')" aria-haspopup="true" aria-expanded="false">
+          Study Notes
+          <svg class="qv-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="qv-dropdown qv-dropdown-wide">
+          <span class="qv-drop-label">Resources</span>
+          <a class="qv-drop-item" href="#">
+            <div class="qv-drop-icon di-teal"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+            <div class="qv-drop-text"><strong>Lecture Notes</strong><span>Chapter-wise PDFs &amp; summaries</span></div>
+          </a>
+          <a class="qv-drop-item" href="#">
+            <div class="qv-drop-icon di-purple"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+            <div class="qv-drop-text"><strong>Short Notes</strong><span>Quick revision &amp; key points</span></div>
+          </a>
+          <a class="qv-drop-item" href="#">
+            <div class="qv-drop-icon di-blue"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+            <div class="qv-drop-text"><strong>Video Lectures</strong><span>Curated YouTube playlists</span></div>
+          </a>
+          <div class="qv-drop-divider"></div>
+          <span class="qv-drop-label">Exam prep</span>
+          <a class="qv-drop-item" href="#">
+            <div class="qv-drop-icon di-amber"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <div class="qv-drop-text"><strong>Model Q&amp;A</strong><span>Solved question banks</span></div>
+          </a>
+          <a class="qv-drop-item" href="#">
+            <div class="qv-drop-icon di-orange"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div class="qv-drop-text"><strong>Previous Year Tips</strong><span>Important topics &amp; patterns</span></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- More -->
+      <div class="qv-nav-item" id="ddMore">
+        <button class="qv-nav-link" onclick="toggleDD('ddMore')" aria-haspopup="true" aria-expanded="false">
+          More
+          <svg class="qv-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="qv-dropdown">
+          <a class="qv-drop-item" href="#">
+            <div class="qv-drop-icon di-teal"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div class="qv-drop-text"><strong>Community</strong><span>Forum &amp; discussions</span></div>
+          </a>
+          <a class="qv-drop-item" href="#">
+            <div class="qv-drop-icon di-blue"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div class="qv-drop-text"><strong>About</strong><span>Our mission &amp; team</span></div>
+          </a>
+          <a class="qv-drop-item" href="#">
+            <div class="qv-drop-icon di-purple"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.82 12 19.79 19.79 0 0 1 1.72 3.39a2 2 0 0 1 1.97-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div class="qv-drop-text"><strong>Contact</strong><span>Get in touch</span></div>
+          </a>
+        </div>
+      </div>
+
+    </nav><!-- /qv-nav -->
+
+    <!-- Right controls -->
+    <div class="qv-right">
+      <button class="qv-theme-btn" id="themeToggle" aria-label="Toggle dark mode"></button>
+
       <a href="admin.html" style="text-decoration:none;">
-        <button class="btn-admin">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
-          Admin Upload
+        <button class="qv-admin-btn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span class="qv-admin-label" style="    font-family: 'DM Sans', sans-serif;">Admin Upload</span>
         </button>
       </a>
+
+      <!-- Hamburger — only visible on mobile via CSS -->
+      <button class="qv-hamburger" id="qvHamburger" aria-label="Toggle menu" aria-expanded="false">
+        <svg id="qvHamIcon" viewBox="0 0 24 24">
+          <line x1="3" y1="6"  x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
     </div>
-  </div>
+
+  </div><!-- /qv-topbar -->
+
+  <!-- ── MOBILE DRAWER ── hidden by default, toggled by JS -->
+  <div class="qv-drawer" id="qvDrawer">
+
+    <div class="qv-drawer-section">
+      <span class="qv-drawer-label">Navigation</span>
+      <a class="qv-drawer-link" href="index.html">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Home
+      </a>
+    </div>
+
+    <div class="qv-drawer-divider"></div>
+
+    <div class="qv-drawer-section">
+      <span class="qv-drawer-label">Question Papers</span>
+      <button class="qv-drawer-link" onclick="qvFilter('category','university'); closeDrawer(); loadPapers();">
+        <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        University Papers
+      </button>
+      <button class="qv-drawer-link" onclick="qvFilter('category','school'); closeDrawer(); loadPapers();">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6M3 15h6"/></svg>
+        School Papers
+      </button>
+      <button class="qv-drawer-link" onclick="qvFocus('year'); closeDrawer();">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        By Year
+      </button>
+      <button class="qv-drawer-link" onclick="qvFocus('course'); closeDrawer();">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+        By Course / Semester
+      </button>
+    </div>
+
+    <div class="qv-drawer-divider"></div>
+
+    <div class="qv-drawer-section">
+      <span class="qv-drawer-label">Study Notes</span>
+      <a class="qv-drawer-link" href="#">
+        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Lecture Notes
+      </a>
+      <a class="qv-drawer-link" href="#">
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Short Notes
+      </a>
+      <a class="qv-drawer-link" href="#">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Video Lectures
+      </a>
+      <a class="qv-drawer-link" href="#">
+        <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Model Q&amp;A
+      </a>
+      <a class="qv-drawer-link" href="#">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Previous Year Tips
+      </a>
+    </div>
+
+    <div class="qv-drawer-divider"></div>
+
+    <div class="qv-drawer-section">
+      <span class="qv-drawer-label">More</span>
+      <a class="qv-drawer-link" href="#">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Community
+      </a>
+      <a class="qv-drawer-link" href="#">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        About
+      </a>
+      <a class="qv-drawer-link" href="#">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.82 12 19.79 19.79 0 0 1 1.72 3.39a2 2 0 0 1 1.97-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Contact
+      </a>
+    </div>
+
+  </div><!-- /qv-drawer -->
 </header>
 
+<!-- ══════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════ -->
 <div class="container">
 
   <div class="section-header">
@@ -495,7 +809,8 @@
 
     <div class="filter-footer">
       <button class="btn-search" onclick="loadPapers()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
@@ -508,21 +823,171 @@
 
 </div>
 
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer class="qv-footer">
+  <div class="qv-footer-inner">
+
+    <!-- Brand + tagline -->
+    <div class="qv-footer-brand">
+      <a href="index.html" class="qv-footer-logo">
+        <img src="./img/4.png" alt="QuesVault">
+      </a>
+      <p class="qv-footer-tagline">Your one-stop vault for question papers, notes, and exam resources across Kerala universities.</p>
+      <div class="qv-footer-socials">
+        <!-- Instagram -->
+        <a href="#" class="qv-social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <!-- Telegram -->
+        <a href="#" class="qv-social-btn" aria-label="Telegram">
+          <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        </a>
+        <!-- WhatsApp -->
+        <a href="#" class="qv-social-btn" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </a>
+        <!-- YouTube -->
+        <a href="#" class="qv-social-btn" aria-label="YouTube">
+          <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="qv-footer-col">
+      <h4 class="qv-footer-heading">Quick Links</h4>
+      <ul class="qv-footer-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">University Papers</a></li>
+        <li><a href="#">School Papers</a></li>
+        <li><a href="#">Study Notes</a></li>
+        <li><a href="#">Model Q&amp;A</a></li>
+      </ul>
+    </div>
+
+    <!-- Universities -->
+    <div class="qv-footer-col">
+      <h4 class="qv-footer-heading">Universities</h4>
+      <ul class="qv-footer-list">
+        <li><a href="#">Kerala University</a></li>
+        <li><a href="#">MG University</a></li>
+        <li><a href="#">Calicut University</a></li>
+        <li><a href="#">Kannur University</a></li>
+        <li><a href="#">KTU</a></li>
+      </ul>
+    </div>
+
+    <!-- Courses -->
+    <div class="qv-footer-col">
+      <h4 class="qv-footer-heading">Popular Courses</h4>
+      <ul class="qv-footer-list">
+        <li><a href="#">BCA</a></li>
+        <li><a href="#">BSc CS</a></li>
+        <li><a href="#">BCom</a></li>
+        <li><a href="#">BBA</a></li>
+        <li><a href="#">Class 10 &amp; 12</a></li>
+      </ul>
+    </div>
+
+    <!-- Help -->
+    <div class="qv-footer-col">
+      <h4 class="qv-footer-heading">Help</h4>
+      <ul class="qv-footer-list">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Community</a></li>
+        <li><a href="admin.html">Admin Upload</a></li>
+        <li><a href="#">Report an Issue</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="qv-footer-bottom">
+    <div class="qv-footer-bottom-inner">
+      <span style="    font-family: 'DM Sans', sans-serif;">&copy; 2025 QuesVault. All rights reserved.</span>
+      <div class="qv-footer-legal">
+        <a href="#">Privacy Policy</a>
+        <span class="qv-footer-dot">·</span>
+        <a href="#">Terms of Use</a>
+        <span class="qv-footer-dot">·</span>
+        <a href="#">Disclaimer</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
 <script src="script.js"></script>
 <script>
-  /* Dark mode toggle */
-  const toggle = document.getElementById('themeToggle');
+  /* ── DARK MODE ── */
+  const themeToggle = document.getElementById('themeToggle');
   const root = document.documentElement;
-
-  const saved = localStorage.getItem('qv-theme');
-  if (saved) root.setAttribute('data-theme', saved);
-
-  toggle.addEventListener('click', () => {
+  const savedTheme = localStorage.getItem('qv-theme');
+  if (savedTheme) root.setAttribute('data-theme', savedTheme);
+  themeToggle.addEventListener('click', () => {
     const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
     localStorage.setItem('qv-theme', next);
   });
 
+  /* ── DESKTOP DROPDOWNS ── */
+  function toggleDD(id) {
+    const item = document.getElementById(id);
+    const isOpen = item.classList.contains('open');
+    closeDD();
+    if (!isOpen) item.classList.add('open');
+  }
+
+  function closeDD() {
+    document.querySelectorAll('.qv-nav-item.open').forEach(el => el.classList.remove('open'));
+  }
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.qv-nav-item')) closeDD();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeDD(); closeDrawer(); }
+  });
+
+  /* ── MOBILE DRAWER ── */
+  const hamburger = document.getElementById('qvHamburger');
+  const drawer    = document.getElementById('qvDrawer');
+  const hamIcon   = document.getElementById('qvHamIcon');
+
+  const CLOSE_SVG = `<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>`;
+  const OPEN_SVG  = `<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>`;
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = drawer.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    hamIcon.innerHTML = isOpen ? CLOSE_SVG : OPEN_SVG;
+  });
+
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamIcon.innerHTML = OPEN_SVG;
+  }
+
+  /* ── FILTER HELPERS (used by nav links) ── */
+  function qvFilter(selectId, value) {
+    const el = document.getElementById(selectId);
+    if (el) { el.value = value; el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  }
+
+  function qvFocus(selectId) {
+    const el = document.getElementById(selectId);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => el.focus(), 400);
+  }
 </script>
 
 </body>
