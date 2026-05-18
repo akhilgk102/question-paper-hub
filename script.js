@@ -138,15 +138,50 @@ card.innerHTML = `
   </div>
 
   <div class="pdf-card-footer">
-    <a href="${file.download_url}" download class="btn-action btn-download">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-           stroke-linecap="round" stroke-linejoin="round" width="15" height="15">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-        <polyline points="17 8 12 13 7 8"/>
-        <line x1="12" y1="3" x2="12" y2="13"/>
-      </svg>
-      Download
-    </a>
+
+
+
+              <div data-w-id="041ab7a4-e089-3f49-7f64-3c5266460fb9"
+              style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; filter: blur(0px); opacity: 1;"
+              class="about-top-btns"><a href="${file.download_url}" data-wf--secondary-btn--variant="model-02"
+                data-w-id="eb4e669e-9f8d-20f1-6ed9-b011d824b479"
+                class="secondary-btn w-variant-cd52b52e-17f6-4329-bd21-53a7497bb79d w-inline-block">
+                <div class="secondary-btn-texts">
+                  <div class="secondary-btn-text-inside">
+                    <div class="nav-button-text"
+                      style="transform: translate3d(0px, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                      Download PDF</div>
+                    <div class="nav-button-text"
+                      style="transform: translate3d(0px, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                      Download PDF</div>
+                  </div>
+                </div>
+                <div class="secondary-btn-icon-outside w-variant-cd52b52e-17f6-4329-bd21-53a7497bb79d">
+                  <div class="secondary-btn-icons">
+                    <div class="secondary-btn-icon-inside"
+                      style="transform: translate3d(-16px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                      <div class="nav-btn-ico w-embed"><svg width="100%" height="100%" viewBox="0 0 17 15" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M7.08594 15L13.5859 8.5L5.68248e-07 8.5L7.43094e-07 6.5L13.5859 6.5L7.08594 -8.41103e-07L9.91406 -5.9386e-07L16.707 6.79297L16.707 8.20703L9.91406 15L7.08594 15Z"
+                            fill="currentColor"></path>
+                        </svg></div>
+                      <div class="nav-btn-ico w-embed"><svg width="100%" height="100%" viewBox="0 0 17 15" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M7.08594 15L13.5859 8.5L5.68248e-07 8.5L7.43094e-07 6.5L13.5859 6.5L7.08594 -8.41103e-07L9.91406 -5.9386e-07L16.707 6.79297L16.707 8.20703L9.91406 15L7.08594 15Z"
+                            fill="currentColor"></path>
+                        </svg></div>
+                    </div>
+                  </div>
+                </div>
+              </a></div>
+
+
+              
+
+              
+    
     <button class="btn-action btn-delete" onclick="deletePaper('${file.name}')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
            stroke-linecap="round" stroke-linejoin="round" width="15" height="15">
