@@ -114,6 +114,8 @@ input {
   padding: 4px 10px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.12);
+      font-family: 'DM Sans', sans-serif;
+
 }
 
 /* ══════════════════════════════════════
@@ -242,6 +244,8 @@ input {
   border-radius: 6px;
   border: 1px solid var(--border);
   text-align: center;
+      font-family: 'DM Sans', sans-serif;
+
 }
 
 /* ══════════════════════════════════════
@@ -266,6 +270,8 @@ input {
   border: 1px solid transparent;
   line-height: 1;
   transition: transform 0.15s, box-shadow 0.15s;
+      font-family: 'DM Sans', sans-serif;
+
 }
 
 .tag:hover {
@@ -369,6 +375,8 @@ input {
   background: #1a56db;
   color: #fff;
   padding: 0 16px;
+      font-family: 'DM Sans', sans-serif;
+
 }
 
 .btn-delete {

@@ -228,6 +228,9 @@ function showDeleteModal(filename) {
           border-radius: 8px;
           padding: 6px 10px;
           margin-bottom: 20px;
+          text-align: center;
+        font-family: 'DM Sans', sans-serif;
+
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .del-modal input {
@@ -260,7 +263,8 @@ function showDeleteModal(filename) {
           color: var(--text-secondary);
           cursor: pointer;
           transition: background 0.15s;
-          font-family: inherit;
+              font-family: 'DM Sans', sans-serif;
+
         }
         .del-btn-cancel:hover { background: var(--border); }
         .del-btn-confirm {
@@ -268,11 +272,12 @@ function showDeleteModal(filename) {
           background: #d32f2f;
           border: none;
           border-radius: 10px;
-          font-size: 13px; font-weight: 600;
+          font-size: 13px; font-weight: 500;
           color: #fff;
           cursor: pointer;
           transition: background 0.15s, transform 0.1s;
-          font-family: inherit;
+              font-family: 'DM Sans', sans-serif;
+
           display: flex; align-items: center; justify-content: center; gap: 6px;
         }
         .del-btn-confirm:hover { background: #b71c1c; }
@@ -289,8 +294,8 @@ function showDeleteModal(filename) {
             <path d="M9 6V4h6v2"/>
           </svg>
         </div>
-        <h3>Delete Paper</h3>
-        <p>This action cannot be undone. Enter the admin password to confirm.</p>
+        <h3 style="    font-family: 'DM Sans', sans-serif;">Delete Paper</h3>
+        <p style="    font-family: 'DM Sans', sans-serif;">This action cannot be undone. Enter the admin password to confirm.</p>
         <div class="del-modal-file">${filename}</div>
         <input type="password" id="del-password-input" placeholder="Admin password" autocomplete="off" />
         <div class="del-modal-btns">
