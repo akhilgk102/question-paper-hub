@@ -52,6 +52,11 @@ async function loadPapers() {
     let course     = courseMap[document.getElementById("course").value] || "";
     let semester   = document.getElementById("semester").value.replace("Sem ", "S");
     let year       = document.getElementById("year").value;
+    let subjectSearch = document
+    .getElementById("subjectSearch")
+    .value
+    .toUpperCase()
+    .trim();
 
     const filtered = files.filter(file => {
       const name = file.name.toUpperCase();
@@ -59,7 +64,8 @@ async function loadPapers() {
         (!university || name.includes(university)) &&
         (!course     || name.includes(course))     &&
         (!semester   || name.includes(semester))   &&
-        (!year       || name.includes(year))
+        (!year       || name.includes(year)) &&
+        (!subjectSearch || name.includes(subjectSearch))
       );
     });
 
