@@ -241,7 +241,7 @@ function showDeleteModal(filename) {
           border: 1px solid #1f2e2c;
           border-radius: 20px;
           padding: 28px 28px 24px;
-          width: 100%; max-width: 380px;
+          width: 100%; max-width: 400px;
           box-shadow: 0 24px 64px rgba(0,0,0,0.6);
           animation: slideUp 0.22s cubic-bezier(.22,.68,0,1.2) both;
           font-family: 'DM Sans', sans-serif;
