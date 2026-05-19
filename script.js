@@ -18,7 +18,18 @@ async function uploadPDF() {
   });
 
   let data = await response.json();
-  document.getElementById("msg").innerHTML = data.message;
+  const form = document.getElementById("upload-form");
+  const successBox = document.querySelector(".w-form-done");
+  const errorBox = document.querySelector(".w-form-fail");
+
+  if(response.ok){
+      form.style.display = "none";
+      successBox.style.display = "block";
+      errorBox.style.display = "none";
+  }else{
+      errorBox.style.display = "block";
+      errorBox.querySelector("div").innerText = data.message;
+  }
 }
 
 async function loadPapers() {
