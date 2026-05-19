@@ -1,23 +1,23 @@
 async function uploadPDF() {
   let file = document.getElementById("pdf").files[0];
   if (!file) {
-  alert("Select PDF");
-  return;
-}
+    alert("Select PDF");
+    return;
+  }
 
-const maxSize = 15 * 1024 * 1024; // 10 MB
+  const maxSize = 15 * 1024 * 1024; // 10 MB
 
-if (file.size > maxSize) {
-  alert("PDF must be under 15 MB");
-  return;
-}
+  if (file.size > maxSize) {
+    alert("PDF must be under 15 MB");
+    return;
+  }
 
-  let category   = document.getElementById("category").value;
+  let category = document.getElementById("category").value;
   let university = document.getElementById("university").value;
-  let course     = document.getElementById("course").value;
-  let semester   = document.getElementById("semester").value;
-  let year       = document.getElementById("year").value;
-  let subject    = document.getElementById("subject").value.trim();
+  let course = document.getElementById("course").value;
+  let semester = document.getElementById("semester").value;
+  let year = document.getElementById("year").value;
+  let subject = document.getElementById("subject").value.trim();
 
   if (!subject) { alert("Enter subject name"); return; }
 
@@ -46,35 +46,35 @@ async function loadPapers() {
     const files = await response.json();
 
     const universityMap = {
-      "Kerala University":  "KU",
-      "MG University":      "MGU",
+      "Kerala University": "KU",
+      "MG University": "MGU",
       "Calicut University": "CU",
-      "Kannur University":  "KNU"
+      "Kannur University": "KNU"
     };
     const courseMap = {
       "BSc Computer Science": "BSC-CS",
-      "BCA":  "BCA",
+      "BCA": "BCA",
       "BCom": "BCOM",
-      "BBA":  "BBA"
+      "BBA": "BBA"
     };
 
     let university = universityMap[document.getElementById("university").value] || "";
-    let course     = courseMap[document.getElementById("course").value] || "";
-    let semester   = document.getElementById("semester").value.replace("Sem ", "S");
-    let year       = document.getElementById("year").value;
+    let course = courseMap[document.getElementById("course").value] || "";
+    let semester = document.getElementById("semester").value.replace("Sem ", "S");
+    let year = document.getElementById("year").value;
     let subjectSearch = document
-    .getElementById("subjectSearch")
-    .value
-    .toUpperCase()
-    .trim();
+      .getElementById("subjectSearch")
+      .value
+      .toUpperCase()
+      .trim();
 
     const filtered = files.filter(file => {
       const name = file.name.toUpperCase();
       return (
         (!university || name.includes(university)) &&
-        (!course     || name.includes(course))     &&
-        (!semester   || name.includes(semester))   &&
-        (!year       || name.includes(year)) &&
+        (!course || name.includes(course)) &&
+        (!semester || name.includes(semester)) &&
+        (!year || name.includes(year)) &&
         (!subjectSearch || name.includes(subjectSearch))
       );
     });
@@ -82,7 +82,7 @@ async function loadPapers() {
     papers.innerHTML = "";
 
     if (filtered.length === 0) {
-    papers.innerHTML = `
+      papers.innerHTML = `
     <div class="empty-state">
         <div class="empty-icon">📭</div>
         <p>No papers found</p>
@@ -99,7 +99,7 @@ async function loadPapers() {
     papers.appendChild(grid);
 
     filtered.forEach((file, index) => {
-      const parts   = file.name.replace(/\.pdf$/i, "").split("_");
+      const parts = file.name.replace(/\.pdf$/i, "").split("_");
       const viewUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(file.download_url)}`;
 
       // Badge label = uni + course  (e.g.  "KU · BCA")
@@ -109,7 +109,7 @@ async function loadPapers() {
       card.className = "pdf-card";
       card.style.animationDelay = `${index * 90}ms`;
 
-card.innerHTML = `
+      card.innerHTML = `
   <div class="pdf-embed-wrap">
     ${badgeText ? `<div class="pdf-card-badge">${badgeText}</div>` : ""}
     <div class="pdf-loader">
@@ -142,7 +142,7 @@ card.innerHTML = `
 
   <div class="pdf-card-body">
     <p class="pdf-card-name" title="${file.name}">
-      ${file.name.replace(".pdf","").replaceAll("_"," ")}
+      ${file.name.replace(".pdf", "").replaceAll("_", " ")}
     </p>
     <div class="pdf-card-tags">
       ${parts[0] ? `<span class="tag tag-uni">${parts[0]}</span>` : ""}
@@ -216,7 +216,7 @@ card.innerHTML = `
 
   } catch (error) {
     console.error(error);
-papers.innerHTML = `
+    papers.innerHTML = `
   <div class="empty-state">
     <div class="empty-icon">⚠️</div>
     <p>Something went wrong</p>
@@ -363,7 +363,7 @@ function showDeleteModal(filename) {
 
     document.body.appendChild(overlay);
 
-    const input     = overlay.querySelector("#del-password-input");
+    const input = overlay.querySelector("#del-password-input");
     const cancelBtn = overlay.querySelector("#del-cancel");
     const confirmBtn = overlay.querySelector("#del-confirm");
 
@@ -374,7 +374,7 @@ function showDeleteModal(filename) {
     cancelBtn.addEventListener("click", () => close(null));
     overlay.addEventListener("click", (e) => { if (e.target === overlay) close(null); });
     input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter")  confirmBtn.click();
+      if (e.key === "Enter") confirmBtn.click();
       if (e.key === "Escape") close(null);
     });
     confirmBtn.addEventListener("click", () => {
@@ -423,3 +423,52 @@ function showToast(message, type = "success") {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
 }
+
+
+// FORCE mobile menu open/close
+window.addEventListener("load", () => {
+
+  const menu = document.querySelector(".menu-wrap-3._02");
+  const openBtn = document.querySelector('[data-w-id="nav-toggle-btn"]');
+  const closeBtn = document.querySelector('[data-w-id="nav-close-btn"]');
+
+  if (!menu || !openBtn || !closeBtn) {
+    console.log("Menu elements not found");
+    return;
+  }
+
+  // remove Webflow interference
+  openBtn.onclick = null;
+  closeBtn.onclick = null;
+
+  openBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    menu.style.display = "flex";
+    menu.style.visibility = "visible";
+    menu.style.opacity = "1";
+    document.body.style.overflow = "hidden";
+  });
+
+  closeBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    menu.style.display = "none";
+    menu.style.visibility = "hidden";
+    menu.style.opacity = "0";
+    document.body.style.overflow = "auto";
+  });
+
+  // for your inline onclick="closeMobileMenu()"
+  window.closeMobileMenu = function () {
+    menu.style.display = "none";
+    menu.style.visibility = "hidden";
+    menu.style.opacity = "0";
+    document.body.style.overflow = "auto";
+  };
+
+});
+
+
