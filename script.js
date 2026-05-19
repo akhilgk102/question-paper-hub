@@ -18,18 +18,7 @@ async function uploadPDF() {
   });
 
   let data = await response.json();
-  const form = document.getElementById("upload-form");
-  const successBox = document.querySelector(".w-form-done");
-  const errorBox = document.querySelector(".w-form-fail");
-
-  if(response.ok){
-      form.style.display = "none";
-      successBox.style.display = "block";
-      errorBox.style.display = "none";
-  }else{
-      errorBox.style.display = "block";
-      errorBox.querySelector("div").innerText = data.message;
-  }
+  document.getElementById("msg").innerHTML = data.message;
 }
 
 async function loadPapers() {
@@ -229,112 +218,109 @@ papers.innerHTML = `
 
 
 
+
 function showDeleteModal(filename) {
   return new Promise((resolve) => {
     const overlay = document.createElement("div");
     overlay.style.cssText = `
       position: fixed; inset: 0; z-index: 9999;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
       display: flex; align-items: center; justify-content: center;
       padding: 20px;
-      animation: fadeIn 0.15s ease;
     `;
 
     overlay.innerHTML = `
       <style>
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px) scale(0.96); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
         .del-modal {
-          background: var(--bg-card);
-          border: 1px solid var(--border);
+          background: #112522;
+          border: 1px solid #1f2e2c;
           border-radius: 20px;
           padding: 28px 28px 24px;
-          width: 100%;
-          max-width: 380px;
-          box-shadow: 0 24px 64px rgba(0,0,0,0.30);
-          animation: slideUp 0.2s cubic-bezier(.22,.68,0,1.2) both;
+          width: 100%; max-width: 380px;
+          box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+          animation: slideUp 0.22s cubic-bezier(.22,.68,0,1.2) both;
+          font-family: 'DM Sans', sans-serif;
         }
         .del-modal-icon {
           width: 48px; height: 48px;
-          background: #fff0f0;
+          background: rgba(211,47,47,0.12);
+          border: 1px solid rgba(211,47,47,0.25);
           border-radius: 12px;
           display: flex; align-items: center; justify-content: center;
           margin-bottom: 16px;
         }
-        .del-modal-icon svg { width: 22px; height: 22px; stroke: #d32f2f; }
+        .del-modal-icon svg { width: 22px; height: 22px; stroke: #f06060; }
         .del-modal h3 {
           font-size: 17px; font-weight: 600;
-          color: var(--text-primary);
-          margin-bottom: 6px;
+          color: #ffffff; margin-bottom: 6px;
+          font-family: 'DM Sans', sans-serif;
         }
         .del-modal p {
-          font-size: 13px; color: var(--text-secondary);
-          margin-bottom: 20px; line-height: 1.5;
+          font-size: 13px; color: #5f6d6b;
+          margin-bottom: 16px; line-height: 1.6;
+          font-family: 'DM Sans', sans-serif;
         }
         .del-modal-file {
           font-size: 11px; font-weight: 600;
-          color: var(--text-muted);
-          background: var(--bg-primary);
-          border: 1px solid var(--border);
+          color: #93afaa;
+          background: #050c0b;
+          border: 1px solid #1f2e2c;
           border-radius: 8px;
-          padding: 6px 10px;
-          margin-bottom: 20px;
+          padding: 8px 12px;
+          margin-bottom: 16px;
           text-align: center;
-        font-family: 'DM Sans', sans-serif;
-
+          font-family: 'DM Sans', sans-serif;
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .del-modal input {
           width: 100%;
           padding: 11px 14px;
-          background: var(--bg-primary);
-          border: 1px solid var(--border);
+          background: #050c0b;
+          border: 1px solid #1f2e2c;
           border-radius: 10px;
           font-size: 14px;
-          color: var(--text-primary);
+          color: #ffffff;
           outline: none;
           margin-bottom: 16px;
           transition: border-color 0.15s, box-shadow 0.15s;
-          font-family: inherit;
+          font-family: 'DM Sans', sans-serif;
+          box-sizing: border-box;
         }
         .del-modal input:focus {
-          border-color: #d32f2f;
+          border-color: rgba(240,96,96,0.5);
           box-shadow: 0 0 0 3px rgba(211,47,47,0.12);
         }
-        .del-modal input::placeholder { color: var(--text-muted); }
-        .del-modal-btns {
-          display: flex; gap: 8px;
-        }
+        .del-modal input::placeholder { color: #3a4a48; }
+        .del-modal-btns { display: flex; gap: 8px; }
         .del-btn-cancel {
-          flex: 1; height: 40px;
-          background: var(--bg-primary);
-          border: 1px solid var(--border);
+          flex: 1; height: 42px;
+          background: #050c0b;
+          border: 1px solid #1f2e2c;
           border-radius: 10px;
           font-size: 13px; font-weight: 500;
-          color: var(--text-secondary);
-          cursor: pointer;
-          transition: background 0.15s;
-              font-family: 'DM Sans', sans-serif;
-
+          color: #5f6d6b; cursor: pointer;
+          font-family: 'DM Sans', sans-serif;
+          transition: background 0.15s, color 0.15s;
         }
-        .del-btn-cancel:hover { background: var(--border); }
+        .del-btn-cancel:hover { background: #1f2e2c; color: #ffffff; }
         .del-btn-confirm {
-          flex: 1; height: 40px;
-          background: #d32f2f;
-          border: none;
-          border-radius: 10px;
-          font-size: 13px; font-weight: 500;
-          color: #fff;
-          cursor: pointer;
-          transition: background 0.15s, transform 0.1s;
-              font-family: 'DM Sans', sans-serif;
-
+          flex: 1; height: 42px;
+          background: #c62828;
+          border: none; border-radius: 10px;
+          font-size: 13px; font-weight: 600;
+          color: #fff; cursor: pointer;
+          font-family: 'DM Sans', sans-serif;
           display: flex; align-items: center; justify-content: center; gap: 6px;
+          transition: background 0.15s, transform 0.1s;
         }
         .del-btn-confirm:hover { background: #b71c1c; }
         .del-btn-confirm:active { transform: scale(0.97); }
-        .del-btn-confirm svg { width: 14px; height: 14px; stroke: #fff; }
+        .del-btn-confirm svg { width: 14px; height: 14px; stroke: #fff; flex-shrink:0; }
       </style>
 
       <div class="del-modal">
@@ -346,8 +332,8 @@ function showDeleteModal(filename) {
             <path d="M9 6V4h6v2"/>
           </svg>
         </div>
-        <h3 style="    font-family: 'DM Sans', sans-serif;">Delete Paper</h3>
-        <p style="    font-family: 'DM Sans', sans-serif;">This action cannot be undone. Enter the admin password to confirm.</p>
+        <h3>Delete Paper</h3>
+        <p>This action cannot be undone. Enter the admin password to confirm.</p>
         <div class="del-modal-file">${filename}</div>
         <input type="password" id="del-password-input" placeholder="Admin password" autocomplete="off" />
         <div class="del-modal-btns">
@@ -367,26 +353,23 @@ function showDeleteModal(filename) {
 
     document.body.appendChild(overlay);
 
-    const input = overlay.querySelector("#del-password-input");
+    const input     = overlay.querySelector("#del-password-input");
     const cancelBtn = overlay.querySelector("#del-cancel");
     const confirmBtn = overlay.querySelector("#del-confirm");
 
     setTimeout(() => input.focus(), 100);
 
-    const close = (value) => {
-      overlay.remove();
-      resolve(value);
-    };
+    const close = (value) => { overlay.remove(); resolve(value); };
 
     cancelBtn.addEventListener("click", () => close(null));
     overlay.addEventListener("click", (e) => { if (e.target === overlay) close(null); });
     input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") confirmBtn.click();
+      if (e.key === "Enter")  confirmBtn.click();
       if (e.key === "Escape") close(null);
     });
     confirmBtn.addEventListener("click", () => {
       const val = input.value.trim();
-      if (!val) { input.focus(); input.style.borderColor = "#d32f2f"; return; }
+      if (!val) { input.focus(); input.style.borderColor = "#f06060"; return; }
       close(val);
     });
   });
