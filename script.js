@@ -1,6 +1,16 @@
 async function uploadPDF() {
   let file = document.getElementById("pdf").files[0];
-  if (!file) { alert("Select PDF"); return; }
+  if (!file) {
+  alert("Select PDF");
+  return;
+}
+
+const maxSize = 15 * 1024 * 1024; // 10 MB
+
+if (file.size > maxSize) {
+  alert("PDF must be under 15 MB");
+  return;
+}
 
   let category   = document.getElementById("category").value;
   let university = document.getElementById("university").value;
